@@ -32,14 +32,15 @@ of a memory it is able to directly address 256 cells of it, one byte each. Gener
 registers can be used by programmer. 
 * Program counter points to next CPU instruction that will be executed after current one (except 
 situation when interrupt or jump is performed). 
-* Stack pointer points to top of a stack (initially 0xFF address) and stack grows in lower addresses direction.
+* Stack pointer points to top of a stack (initially 0xFF address of memory) and stack grows in 
+lower addresses direction.
 * Flag register holds information about current CPU state:
  * ZF (zero flag) bit 0
-  * if 0 - result of last comparision is different than zero
-  * if 1 - result of last comparision is zero
+  - if 0 - result of last comparision is different than zero
+  - if 1 - result of last comparision is zero
  * CF (carry flag) bit 1
-  * if 0 - result of last comparision didn't lead to carry out
-  * if 1 - otherwise 
+  - if 0 - result of last comparision didn't lead to carry out
+  - if 1 - otherwise 
 
 ## Virtual machine design
 ```
