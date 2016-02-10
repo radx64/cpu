@@ -60,11 +60,11 @@ Flag register holds information about current CPU state:
 [ONGOING]
 ```
 ## Central Processing Unit Instruction Set Reference
-```
+
 + RDST - destination register [R0 .. R7]
 + RSRC - source register      [R0 .. R7]
 + immv - immediate value (constant from machine code)
-
+```
 ╒═══════════════╤═════════╤══════════════╤══════════════════════════════════╕
 │ Instruction   │ OpCode  │ Operands     │ Description                      │           
 ╞═══════════════╪═════════╪══════════════╪══════════════════════════════════╡
