@@ -18,7 +18,7 @@ Project is written in Python 3.
 ╞════════════════════════════════════════╪═══════════════════════════╡
 │ Architecture (word size, address bus)  │ 8 bit                     │
 ├────────────────────────────────────────┼───────────────────────────┤
-│ Registers set:                         │ 11 registers              │
+│ Registers set:                         │ 20 registers              │
 │           general purpose registers    │ R0 .. R7                  │
 │           program counter              │ PC                        │
 │           stack pointer                │ SP                        │
