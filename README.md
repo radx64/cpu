@@ -7,16 +7,21 @@ Project is written in Python 3.
 
 ## Project parts
 * [ ] CPU design - ongoing
-* [ ] Compiler implementation
 * [ ] Virtual machine implementation
+* [ ] Decompiler implementation
+* [ ] Compiler implementation
 * [ ] Example programs
 
-## CPU design
+## Virtual Machine design
 ```
 ╒════════════════════════════════════════╤═══════════════════════════╕
 │ Parameter                              │ Value                     │
 ╞════════════════════════════════════════╪═══════════════════════════╡
 │ Architecture (word size, address bus)  │ 8 bit                     │
+├────────────────────────────────────────┼───────────────────────────┤
+│ Random Access Memory size              │ 256 words                 │
+├────────────────────────────────────────┼───────────────────────────┤
+│ Read Only Memory (Program memory)      │ 256 words                 │
 ├────────────────────────────────────────┼───────────────────────────┤
 │ Registers set:                         │ 20 registers              │
 │           general purpose registers    │ R0 .. R7                  │
@@ -46,19 +51,17 @@ Flag register holds information about current CPU state:
  - if 0 - result of last comparison didn't lead to carry out
  - if 1 - otherwise 
 
-## Virtual machine design
+## Virtual machine block diagram
 ```
 ╒══════════════════╕   In/Out Port   ╒══════════════════╕  
 │     Terminal     │ <-------------> │     Central      │
 ╘══════════════════╛                 │                  │
 ╒══════════════════╕   Memory bus    │                  │    Memory bus    ╒══════════════════╕
-│Random Access Mem │ <-------------> │    Processing    │  <-------------> │ Read Only Memory │
+│Random Access Mem.│ <-------------> │    Processing    │  <-------------> │ Read Only Memory │
 ╘══════════════════╛                 │                  │                  ╘══════════════════╛
 ╒══════════════════╕ Interrupt line  │                  │
 │Progammable timer │ <-------------> │       Unit       │
 ╘══════════════════╛                 ╘══════════════════╛
-
-[ONGOING]
 ```
 ## Central Processing Unit Instruction Set Reference
 
