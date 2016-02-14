@@ -32,9 +32,10 @@ of a memory it is able to directly address 256 cells of it, one byte each. Gener
 registers can be used by programmer. 
 
 Program counter points to next CPU instruction that will be executed after current one (except 
-situation when interrupt or jump is performed). 
+situation when interrupt or jump is performed). CPU instructions are stored in ROM which 
+is initialized before CPU start.
 
-Stack pointer points to top of a stack (initially 0xFF address of memory) and stack grows in 
+Stack pointer points to top of a stack in RAM (initially 0xFF address of memory) and stack grows in 
 lower addresses direction.
 
 Flag register holds information about current CPU state:
@@ -50,9 +51,9 @@ Flag register holds information about current CPU state:
 ╒══════════════════╕   In/Out Port   ╒══════════════════╕  
 │     Terminal     │ <-------------> │     Central      │
 ╘══════════════════╛                 │                  │
-╒══════════════════╕   Memory bus    │                  │
-│      Memory      │ <-------------> │    Processing    │
-╘══════════════════╛                 │                  │
+╒══════════════════╕   Memory bus    │                  │    Memory bus    ╒══════════════════╕
+│Random Access Mem │ <-------------> │    Processing    │  <-------------> │ Read Only Memory │
+╘══════════════════╛                 │                  │                  ╘══════════════════╛
 ╒══════════════════╕ Interrupt line  │                  │
 │Progammable timer │ <-------------> │       Unit       │
 ╘══════════════════╛                 ╘══════════════════╛
