@@ -115,13 +115,46 @@ Flag register holds information about current CPU state:
 │ SHR           │ 0x1A    │ RDST         │ Shift right bits in RDST         │
 │               │         │              │                                  │
 ├───────────────┼─────────┼──────────────┼──────────────────────────────────┤
-│ ---           │ 0x--    │              │ t.b.d                            │
-│               │         │              │                                  │
 ├───────────────┼─────────┼──────────────┼──────────────────────────────────┤
-│ ---           │ 0x--    │              │ t.b.d                            │
-│               │         │              │                                  │
+│ CMP           │ 0x20    │ RDST, RSRC   │ Checks if substraction of RSRC   │
+│               │         │              │ from RDST is equal 0. If yes it  │
+│               │         │              │ sets ZF bit in FR register to 1, │
+│               │         │              │ 0 otherwise. If substraction     │
+│               │         │              │ gives negative value CF is set to│
+│               │         │              │ 1, otherwise 0.                  │
 ├───────────────┼─────────┼──────────────┼──────────────────────────────────┤
-│ ---           │ 0x--    │              │ t.b.d                            │
+│ JZ            │ 0x21    │ immv         │ If ZF is set increase PC of immv │
+│               │         │              │ (PC + immv mod 2^8).             │
+│               │         │              │ If ZF is not set do nothing      │
+├───────────────┼─────────┼──────────────┼──────────────────────────────────┤
+│ JZ            │ 0x21    │ immv         │ If ZF is set increase PC of immv │
+│               │         │              │ (PC + immv mod 2^8).             │
+│               │         │              │ If ZF is not set do nothing.     │
+├───────────────┼─────────┼──────────────┼──────────────────────────────────┤
+│ JNZ           │ 0x22    │ immv         │ If ZF is not set increase PC of  │
+│               │         │              │ immv (PC + immv mod 2^8).        │
+│               │         │              │ If ZF is set do nothing.         │
+├───────────────┼─────────┼──────────────┼──────────────────────────────────┤
+│ JC            │ 0x23    │ immv         │ If CF is set increase PC of immv │
+│               │         │              │ (PC + immv mod 2^8).             │
+│               │         │              │ If CF is not set do nothing.     │
+├───────────────┼─────────┼──────────────┼──────────────────────────────────┤
+│ JNC           │ 0x24    │ immv         │ If CF is not set increase PC of  │
+│               │         │              │ immv (PC + immv mod 2^8).        │
+│               │         │              │ If CF is not set do nothing.     │
+├───────────────┼─────────┼──────────────┼──────────────────────────────────┤
+│ JBE           │ 0x25    │ immv         │ If CF or ZF is set increase PC of│
+│               │         │              │ immv (PC + immv mod 2^8).        │
+│               │         │              │ Otherwise do nothing.            │
+├───────────────┼─────────┼──────────────┼──────────────────────────────────┤
+│ JA            │ 0x26    │ immv         │ If CF is set increase and ZF is  │
+│               │         │              │ not set increase PC of immv      │
+│               │         │              │ (PC + immv mod 2^8).             │
+│               │         │              │ Otherwise do nothing.            │
+├───────────────┼─────────┼──────────────┼──────────────────────────────────┤
+├───────────────┼─────────┼──────────────┼──────────────────────────────────┤
+│ ---           │ 0x--    │              │                                  │
+│               │         │              │                                  │
 │               │         │              │                                  │
 ├───────────────┼─────────┼──────────────┼──────────────────────────────────┤
 ├───────────────┼─────────┼──────────────┼──────────────────────────────────┤
