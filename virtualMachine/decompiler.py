@@ -41,9 +41,13 @@ class Decompiler:
 
     def run(self):
         index = 0;
-        while index < len(self.binary):
-            currentByte = self.binary[index]
-            index = self._decode(index)
+        try:
+            while index < len(self.binary):
+                currentByte = self.binary[index]
+                index = self._decode(index)
+        except Exception as e:
+            print("Exception was thrown: {0}".format(e))
+            self.source = ""
 
     def printDecompiled(self):
         print (self.source)
@@ -57,9 +61,12 @@ class Decompiler:
     def _decodeConstant(self, index):
         pass
     def _decodeRegister(self, index):
-        byte = self.binary[index]
-        self._appendToEndOfASource(generalRegisterIdToName[byte])
-        pass
+        try :
+            byte = self.binary[index]
+            self._appendToEndOfASource(generalRegisterIdToName[byte])
+        except KeyError :
+            print ("Couldn't decode register 0x{0:02x} at byte 0x{1:02x}".format(byte, index))
+            raise Exception("Decompilation failed!")
 
     def _decodeOperands(self, opcode, index):
         for operIndex, operand in enumerate(opcodeToMnemonic[opcode]):
@@ -71,7 +78,7 @@ class Decompiler:
             elif operand == "C":
                 self._decodeConstant(index+operIndex)
             else:
-                raise "Error! Unknown operand type"
+                raise Exception("Error! Unknown operand type")
             if (operIndex < len(opcodeToMnemonic[opcode])-1):
                 self._appendToEndOfASource(", ")
         self._appendNewLineToSource()
@@ -90,7 +97,7 @@ if __name__ == '__main__':
     d = Decompiler()
     programm = []
     programm.append(0x00)
-    programm.append(0x01)
+    programm.append(0x21)
     programm.append(0x02)
     programm.append(0x03)
     programm.append(0x01)
