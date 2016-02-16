@@ -53,7 +53,7 @@ Flag register holds information about current CPU state:
 
 ## Virtual machine block diagram
 ```
-╒══════════════════╕   In/Out Port   ╒══════════════════╕  
+╒══════════════════╕   In/Out Port   ╒══════════════════╕
 │     Terminal     │ <-------------> │     Central      │
 ╘══════════════════╛                 │                  │
 ╒══════════════════╕   Memory bus    │                  │    Memory bus    ╒══════════════════╕
@@ -70,11 +70,11 @@ Flag register holds information about current CPU state:
 + immv - immediate value (constant from machine code)
 ```
 ╒═══════════════╤═════════╤══════════════╤══════════════════════════════════╕
-│ Instruction   │ OpCode  │ Operands     │ Description                      │           
+│ Instruction   │ OpCode  │ Operands     │ Description                      │
 ╞═══════════════╧═════════╧══════════════╧══════════════════════════════════╡
 │                         Memory Handling                                   │ 
 ├───────────────┬─────────┬──────────────┬──────────────────────────────────┤
-│ MOV           │ 0x00    │ RDST, RSRC   │ Copy data from RSRC to RDST      │  
+│ MOV           │ 0x00    │ RDST, RSRC   │ Copy data from RSRC to RDST      │
 ├───────────────┼─────────┼──────────────┼──────────────────────────────────┤
 │ SET           │ 0x01    │ RDST, immv   │ Copy immv to RDST                │
 ├───────────────┼─────────┼──────────────┼──────────────────────────────────┤
@@ -86,7 +86,7 @@ Flag register holds information about current CPU state:
 ├───────────────┴─────────┴──────────────┴──────────────────────────────────┤
 │                  Mathematical and logic operations                        │ 
 ├───────────────┬─────────┬──────────────┬──────────────────────────────────┤
-│ ADD           │ 0x10    │ RDST, RSRC   │ Add value from RSRC to RDST and  │  
+│ ADD           │ 0x10    │ RDST, RSRC   │ Add value from RSRC to RDST and  │
 │               │         │              │ store result in RDST             │
 ├───────────────┼─────────┼──────────────┼──────────────────────────────────┤
 │ SUB           │ 0x11    │ RDST, RSRC   │ Subtract value of RSTC from RDST │
@@ -124,8 +124,8 @@ Flag register holds information about current CPU state:
 │               │         │              │ from RDST is equal 0. If yes it  │
 │               │         │              │ sets ZF bit in FR register to 1, │
 │               │         │              │ 0 otherwise. If substraction     │
-│               │         │              │ gives negative value CF is set to│
-│               │         │              │ 1, otherwise 0.                  │
+│               │         │              │ gives negative value CF is set   │
+│               │         │              │ to 1, otherwise 0.               │
 ├───────────────┼─────────┼──────────────┼──────────────────────────────────┤
 │ JZ            │ 0x21    │ immv         │ If ZF is set increase PC of immv │
 │               │         │              │ (PC + immv mod 2^8).             │
