@@ -50,7 +50,7 @@ class Decompiler:
             self.source = ""
 
     def printDecompiled(self):
-        print (self.source)
+        print (self.source[0:-1])
 
     def _appendToEndOfASource(self, code):
         self.source += code
@@ -69,6 +69,7 @@ class Decompiler:
             raise Exception("Decompilation failed!")
 
     def _decodeOperands(self, opcode, index):
+        operandsCount = len(opcodeToMnemonic[opcode])
         for operIndex, operand in enumerate(opcodeToMnemonic[opcode]):
             if operIndex == 0:   #skipping operand 0 as its mnemonic name
                 self._appendToEndOfASource(operand + " ")
@@ -79,10 +80,9 @@ class Decompiler:
                 self._decodeConstant(index+operIndex)
             else:
                 raise Exception("Error! Unknown operand type")
-            if (operIndex < len(opcodeToMnemonic[opcode])-1):
+            if (operIndex < operandsCount-1):
                 self._appendToEndOfASource(", ")
         self._appendNewLineToSource()
-        operandsCount = len(opcodeToMnemonic[opcode])
         return operandsCount
 
     def _decode(self,index):
@@ -90,18 +90,9 @@ class Decompiler:
         newIndex = index + self._decodeOperands(opcode, index)
         return newIndex;
 
-
-
-
 if __name__ == '__main__':
     d = Decompiler()
-    programm = []
-    programm.append(0x00)
-    programm.append(0x21)
-    programm.append(0x02)
-    programm.append(0x03)
-    programm.append(0x01)
-    programm.append(0x02)
+    programm = [0x00, 0x02, 0x00, 0x03, 0x01, 0x02]
     d.load(programm)
     d.run()
     d.printDecompiled()
