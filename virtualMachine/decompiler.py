@@ -5,7 +5,28 @@ opcodeToMnemonic = {
     0x00 : ("MOV", "R", "R"),
     0x01 : ("SET", "R", "C"),
     0x02 : ("LD",  "R", "R"),
-    0x03 : ("STR", "R", "R")
+    0x03 : ("STR", "R", "R"),
+    0x03 : ("STR", "R", "R"),
+    0x10 : ("ADD", "R", "R"),
+    0x11 : ("SUB", "R", "R"),
+    0x12 : ("MUL", "R", "R"),
+    0x13 : ("DIV", "R", "R"),
+    0x14 : ("MOD", "R", "R"),
+    0x15 : ("OR",  "R", "R"),
+    0x16 : ("AND", "R", "R"),
+    0x17 : ("XOR", "R", "R"),
+    0x18 : ("NOT", "R"),
+    0x19 : ("SHL", "R"),
+    0x1A : ("SHR", "R"),
+    0x20 : ("CMP", "R", "R"),
+    0x21 : ("JZ",  "C"),
+    0x22 : ("JNZ", "C"),
+    0x23 : ("JC",  "C"),
+    0x24 : ("JNC", "C"),
+    0x25 : ("JBE", "C"),
+    0x26 : ("JA",  "C"),
+    0x30 : ("PSH", "R"), 
+    0x31 : ("POP", "R"),
 }
 
 generalRegisterIdToName = {
@@ -98,6 +119,9 @@ if __name__ == '__main__':
     0x00, 0x02, 0x00, 0x03, 0x01, 0x02,
     0x01, 0x02, 0x00, 0x03, 0x01, 0x02,
     ]
+    print("Loading programm...")
     d.load(programm)
+    print("Decompiling...")
     d.run()
+    print("Decompiled:")
     d.printDecompiled()
