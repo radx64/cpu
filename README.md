@@ -78,10 +78,10 @@ Flag register holds information about current CPU state:
 ├───────────────┼─────────┼──────────────┼──────────────────────────────────┤
 │ SET           │ 0x01    │ RDST, immv   │ Copy immv to RDST                │
 ├───────────────┼─────────┼──────────────┼──────────────────────────────────┤
-│ LD            │ 0x02    │ RDST, RSRC   │ Load data from memory at address │
+│ LOAD          │ 0x02    │ RDST, RSRC   │ Load data from memory at address │
 │               │         │              │ pointed by RSRC to RDST register │
 ├───────────────┼─────────┼──────────────┼──────────────────────────────────┤
-│ STR           │ 0x03    │ RDST, RSRC   │ Store data to memory at address  │
+│ STOR          │ 0x03    │ RDST, RSRC   │ Store data to memory at address  │
 │               │         │              │ pointed by RDST from RSRC reg.   │
 ├───────────────┴─────────┴──────────────┴──────────────────────────────────┤
 │                  Mathematical and logic operations                        │ 
@@ -118,7 +118,7 @@ Flag register holds information about current CPU state:
 │ SHR           │ 0x1A    │ RDST         │ Shift right bits in RDST         │
 │               │         │              │                                  │
 ├───────────────┴─────────┴──────────────┴──────────────────────────────────┤
-│                        Comparisions and jumps                             │ 
+│                   Comparisions and conditionals jumps                     │ 
 ├───────────────┬─────────┬──────────────┬──────────────────────────────────┤
 │ CMP           │ 0x20    │ RDST, RSRC   │ Checks if substraction of RSRC   │
 │               │         │              │ from RDST is equal 0. If yes it  │
@@ -154,13 +154,27 @@ Flag register holds information about current CPU state:
 ├───────────────┴─────────┴──────────────┴──────────────────────────────────┤
 │                            Stack handling                                 │ 
 ├───────────────┬─────────┬──────────────┬──────────────────────────────────┤
-│ PSH           │ 0x30    │ RSRC         │ Push value from RSRC onto stack  │
+│ PUSH          │ 0x30    │ RSRC         │ Push value from RSRC onto stack. │
 ├───────────────┼─────────┼──────────────┼──────────────────────────────────┤
-│ POP           │ 0x31    │ RDST         │ Pop value from stack to RDST     │
+│ POP           │ 0x31    │ RDST         │ Pop value from stack to RDST.    │
 ├───────────────┴─────────┴──────────────┴──────────────────────────────────┤
-│                            to be continued ...                            │ 
+│                 Unconditional jumps and function calls                    │ 
 ├───────────────┬─────────┬──────────────┬──────────────────────────────────┤
+│ JMP           │ 0x40    │ immv         │ Jump to addrres relative to immv.│
+│               │         │              │ (PC + immv mod 2^8)              │
+├───────────────┼─────────┼──────────────┼──────────────────────────────────┤
+│ JMR           │ 0x41    │ RSRC         │ Jump to addrres relative to addr │
+│               │         │              │ in RSRC register.                │
+│               │         │              │ (PC + RSRC mod 2^8)              │
+├───────────────┼─────────┼──────────────┼──────────────────────────────────┤
+│ CALL          │ 0x42    │ immv         │ Calls function from address immv.│
 │               │         │              │                                  │
+├───────────────┼─────────┼──────────────┼──────────────────────────────────┤
+│ CALR          │ 0x43    │ RSRC         │ Calls function from address in   │
+│               │         │              │ RSRC register.                   │
+├───────────────┼─────────┼──────────────┼──────────────────────────────────┤
+│ RET           │ 0x44    │ RSRC         │ Get return address from stack and│
+│               │         │              │ jumps to it.                     │
 ├───────────────┴─────────┴──────────────┴──────────────────────────────────┤
 │                              Stopping CPU                                 │ 
 ├───────────────┬─────────┬──────────────┬──────────────────────────────────┤
