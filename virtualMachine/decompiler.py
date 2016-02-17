@@ -1,32 +1,36 @@
 
 # R - register name after instruction
-# C - constant value (immv)
+# I - constant value (immv)
 opcodeToMnemonic = {
-    0x00 : ("MOV", "R", "R"),
-    0x01 : ("SET", "R", "C"),
-    0x02 : ("LD",  "R", "R"),
-    0x03 : ("STR", "R", "R"),
-    0x03 : ("STR", "R", "R"),
-    0x10 : ("ADD", "R", "R"),
-    0x11 : ("SUB", "R", "R"),
-    0x12 : ("MUL", "R", "R"),
-    0x13 : ("DIV", "R", "R"),
-    0x14 : ("MOD", "R", "R"),
-    0x15 : ("OR",  "R", "R"),
-    0x16 : ("AND", "R", "R"),
-    0x17 : ("XOR", "R", "R"),
-    0x18 : ("NOT", "R"),
-    0x19 : ("SHL", "R"),
-    0x1A : ("SHR", "R"),
-    0x20 : ("CMP", "R", "R"),
-    0x21 : ("JZ",  "C"),
-    0x22 : ("JNZ", "C"),
-    0x23 : ("JC",  "C"),
-    0x24 : ("JNC", "C"),
-    0x25 : ("JBE", "C"),
-    0x26 : ("JA",  "C"),
-    0x30 : ("PSH", "R"), 
-    0x31 : ("POP", "R"),
+    0x00 : ("MOV",  "R", "R"),
+    0x01 : ("SET",  "R", "I"),
+    0x02 : ("LOAD", "R", "R"),
+    0x03 : ("STOR", "R", "R"),
+    0x10 : ("ADD",  "R", "R"),
+    0x11 : ("SUB",  "R", "R"),
+    0x12 : ("MUL",  "R", "R"),
+    0x13 : ("DIV",  "R", "R"),
+    0x14 : ("MOD",  "R", "R"),
+    0x15 : ("OR",   "R", "R"),
+    0x16 : ("AND",  "R", "R"),
+    0x17 : ("XOR",  "R", "R"),
+    0x18 : ("NOT",  "R"),
+    0x19 : ("SHL",  "R"),
+    0x1A : ("SHR",  "R"),
+    0x20 : ("CMP",  "R", "R"),
+    0x21 : ("JZ",   "I"),
+    0x22 : ("JNZ",  "I"),
+    0x23 : ("JC",   "I"),
+    0x24 : ("JNC",  "I"),
+    0x25 : ("JBE",  "I"),
+    0x26 : ("JA",   "I"),
+    0x30 : ("PUSH", "R"), 
+    0x31 : ("POP",  "R"),
+    0x40 : ("JMP",  "I"), 
+    0x41 : ("JMPR", "R"),
+    0x42 : ("CALL", "I"), 
+    0x43 : ("CALR", "R"),
+    0x44 : ("RET",  "I"), 
 }
 
 generalRegisterIdToName = {
@@ -99,7 +103,7 @@ class Decompiler:
                 continue
             if operand == "R":
                 self._decodeRegister(index+operIndex)
-            elif operand == "C":
+            elif operand == "I":
                 self._decodeConstant(index+operIndex)
             else:
                 raise Exception("Error! Unknown operand type")
