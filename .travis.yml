@@ -5,4 +5,4 @@ python:
 # install: "pip install -r requirements.txt"
 # command to run tests
 
-script: for testcase in ./virtualMachine/*_UT.py; do python $testcase done
+script: python virtualMachine/decompiler_UT.py
