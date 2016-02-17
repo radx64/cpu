@@ -131,10 +131,6 @@ Flag register holds information about current CPU state:
 │               │         │              │ (PC + immv mod 2^8).             │
 │               │         │              │ If ZF is not set do nothing      │
 ├───────────────┼─────────┼──────────────┼──────────────────────────────────┤
-│ JZ            │ 0x21    │ immv         │ If ZF is set increase PC of immv │
-│               │         │              │ (PC + immv mod 2^8).             │
-│               │         │              │ If ZF is not set do nothing.     │
-├───────────────┼─────────┼──────────────┼──────────────────────────────────┤
 │ JNZ           │ 0x22    │ immv         │ If ZF is not set increase PC of  │
 │               │         │              │ immv (PC + immv mod 2^8).        │
 │               │         │              │ If ZF is set do nothing.         │
@@ -158,9 +154,9 @@ Flag register holds information about current CPU state:
 ├───────────────┴─────────┴──────────────┴──────────────────────────────────┤
 │                            Stack handling                                 │ 
 ├───────────────┬─────────┬──────────────┬──────────────────────────────────┤
-│ PSH           │ 0x31    │ RSRC         │ Push value from RSRC onto stack  │
+│ PSH           │ 0x30    │ RSRC         │ Push value from RSRC onto stack  │
 ├───────────────┼─────────┼──────────────┼──────────────────────────────────┤
-│ POP           │ 0x32    │ RDST         │ Pop value from stack to RDST     │
+│ POP           │ 0x31    │ RDST         │ Pop value from stack to RDST     │
 ├───────────────┴─────────┴──────────────┴──────────────────────────────────┤
 │                            to be continued ...                            │ 
 ├───────────────┬─────────┬──────────────┬──────────────────────────────────┤
