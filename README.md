@@ -163,7 +163,7 @@ Flag register holds information about current CPU state:
 │ JMP           │ 0x40    │ immv         │ Jump to addrres relative to immv.│
 │               │         │              │ (PC + immv mod 2^8)              │
 ├───────────────┼─────────┼──────────────┼──────────────────────────────────┤
-│ JMR           │ 0x41    │ RSRC         │ Jump to addrres relative to addr │
+│ JMPR          │ 0x41    │ RSRC         │ Jump to addrres relative to addr │
 │               │         │              │ in RSRC register.                │
 │               │         │              │ (PC + RSRC mod 2^8)              │
 ├───────────────┼─────────┼──────────────┼──────────────────────────────────┤
@@ -178,7 +178,7 @@ Flag register holds information about current CPU state:
 ├───────────────┴─────────┴──────────────┴──────────────────────────────────┤
 │                              Stopping CPU                                 │ 
 ├───────────────┬─────────┬──────────────┬──────────────────────────────────┤
-│ HLT           │ 0xFF    │              │ Stop executing further           │
+│ HALT          │ 0xFF    │              │ Stop executing further           │
 │               │         │              │ instructions                     │
 ╘═══════════════╧═════════╧══════════════╧══════════════════════════════════╛
 
