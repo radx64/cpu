@@ -59,7 +59,9 @@ class Decompiler:
         self.source +="\n"
 
     def _decodeConstant(self, index):
-        pass
+        constantValue = "0x{0:02x}".format(self.binary[index])
+        self._appendToEndOfASource(constantValue)
+
     def _decodeRegister(self, index):
         try :
             byte = self.binary[index]
@@ -92,7 +94,10 @@ class Decompiler:
 
 if __name__ == '__main__':
     d = Decompiler()
-    programm = [0x00, 0x02, 0x00, 0x03, 0x01, 0x02]
+    programm = [
+    0x00, 0x02, 0x00, 0x03, 0x01, 0x02,
+    0x01, 0x02, 0x00, 0x03, 0x01, 0x02,
+    ]
     d.load(programm)
     d.run()
     d.printDecompiled()
