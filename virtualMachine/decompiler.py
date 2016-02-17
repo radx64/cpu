@@ -66,16 +66,12 @@ class Decompiler:
 
     def run(self):
         index = 0;
-        try:
-            while index < len(self.binary):
-                currentByte = self.binary[index]
-                index = self._decode(index)
-        except Exception as e:
-            print("Exception was thrown: {0}".format(e))
-            self.source = ""
+        while index < len(self.binary):
+            currentByte = self.binary[index]
+            index = self._decode(index)
 
-    def printDecompiled(self):
-        print (self.source[0:-1])
+    def getDecompiled(self):
+        return(self.source[0:-1])
 
     def _appendToEndOfASource(self, code):
         self.source += code
@@ -92,8 +88,8 @@ class Decompiler:
             byte = self.binary[index]
             self._appendToEndOfASource(generalRegisterIdToName[byte])
         except KeyError :
-            print ("Couldn't decode register 0x{0:02x} at byte 0x{1:02x}".format(byte, index))
-            raise Exception("Decompilation failed!")
+            error = "Couldn't decode register 0x{0:02x} at byte 0x{1:02x}".format(byte, index)
+            raise Exception("Decompilation failed!" + error)
 
     def _decodeOperands(self, opcode, index):
         operandsCount = len(opcodeToMnemonic[opcode])
@@ -116,16 +112,3 @@ class Decompiler:
         opcode = self.binary[index]
         newIndex = index + self._decodeOperands(opcode, index)
         return newIndex;
-
-if __name__ == '__main__':
-    d = Decompiler()
-    programm = [
-    0x00, 0x02, 0x00, 0x03, 0x01, 0x02,
-    0x01, 0x02, 0x00, 0x03, 0x01, 0x02,
-    ]
-    print("Loading programm...")
-    d.load(programm)
-    print("Decompiling...")
-    d.run()
-    print("Decompiled:")
-    d.printDecompiled()
