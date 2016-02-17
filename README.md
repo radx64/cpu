@@ -12,6 +12,9 @@ Project is written in Python 3.
 * [ ] Compiler implementation
 * [ ] Example programs
 
+Travis status: 
+[![Build Status](https://travis-ci.org/radx64/cpu.svg?branch=master)](https://travis-ci.org/radx64/cpu)
+
 ## Virtual Machine design
 ```
 ╒════════════════════════════════════════╤═══════════════════════════╕
