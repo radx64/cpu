@@ -80,7 +80,7 @@ class Decompiler:
         self.source +="\n"
 
     def _decodeConstant(self, index):
-        constantValue = "0x{0:02x}".format(self.binary[index])
+        constantValue = "0x{0:02X}".format(self.binary[index])
         self._appendToEndOfASource(constantValue)
 
     def _decodeRegister(self, index):
@@ -88,25 +88,29 @@ class Decompiler:
             byte = self.binary[index]
             self._appendToEndOfASource(generalRegisterIdToName[byte])
         except KeyError :
-            error = "Couldn't decode register 0x{0:02x} at byte 0x{1:02x}".format(byte, index)
-            raise Exception("Decompilation failed!" + error)
+            error = "Couldn't decode register 0x{0:02X} at byte 0x{1:02X}".format(byte, index)
+            raise Exception("Decompilation failed! " + error)
 
     def _decodeOperands(self, opcode, index):
-        operandsCount = len(opcodeToMnemonic[opcode])
-        for operIndex, operand in enumerate(opcodeToMnemonic[opcode]):
-            if operIndex == 0:   #skipping operand 0 as its mnemonic name
-                self._appendToEndOfASource(operand + " ")
-                continue
-            if operand == "R":
-                self._decodeRegister(index+operIndex)
-            elif operand == "I":
-                self._decodeConstant(index+operIndex)
-            else:
-                raise Exception("Error! Unknown operand type")
-            if (operIndex < operandsCount-1):
-                self._appendToEndOfASource(", ")
-        self._appendNewLineToSource()
-        return operandsCount
+        try:
+            operandsCount = len(opcodeToMnemonic[opcode])
+            for operIndex, operand in enumerate(opcodeToMnemonic[opcode]):
+                if operIndex == 0:   #skipping operand 0 as its mnemonic name
+                    self._appendToEndOfASource(operand + " ")
+                    continue
+                if operand == "R":
+                    self._decodeRegister(index+operIndex)
+                elif operand == "I":
+                    self._decodeConstant(index+operIndex)
+                else:
+                    raise Exception("Error! Unknown operand type in mnemonic Look Up Table")
+                if (operIndex < operandsCount-1):
+                    self._appendToEndOfASource(", ")
+            self._appendNewLineToSource()
+            return operandsCount
+        except KeyError:
+            error = "Couldn't decode instruction 0x{0:02X} at byte 0x{1:02X}".format(opcode, index)
+            raise Exception("Decompilation failed! " + error)
 
     def _decode(self,index):
         opcode = self.binary[index]
