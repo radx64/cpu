@@ -7,8 +7,8 @@ Project is written in Python 3.
 
 ## Project parts
 * [ ] CPU design - ongoing
+* [X] Decompiler implementation (only need to extend mnemonic LUT after CPU design finish)
 * [ ] Virtual machine implementation
-* [ ] Decompiler implementation
 * [ ] Compiler implementation
 * [ ] Example programs
 
@@ -73,9 +73,9 @@ Flag register holds information about current CPU state:
 + immv - immediate value (constant from machine code)
 ```
 ╒═══════════════╤═════════╤══════════════╤══════════════════════════════════╕
-│ Instruction   │ OpCode  │ Operands     │ Description                      │
+│  Instruction  │ OpCode  │   Operands   │           Description            │
 ╞═══════════════╧═════════╧══════════════╧══════════════════════════════════╡
-│                         Memory Handling                                   │ 
+│                         Memory Handling                                   │
 ├───────────────┬─────────┬──────────────┬──────────────────────────────────┤
 │ MOV           │ 0x00    │ RDST, RSRC   │ Copy data from RSRC to RDST      │
 ├───────────────┼─────────┼──────────────┼──────────────────────────────────┤
@@ -87,7 +87,7 @@ Flag register holds information about current CPU state:
 │ STOR          │ 0x03    │ RDST, RSRC   │ Store data to memory at address  │
 │               │         │              │ pointed by RDST from RSRC reg.   │
 ├───────────────┴─────────┴──────────────┴──────────────────────────────────┤
-│                  Mathematical and logic operations                        │ 
+│                    Mathematical and logic operations                      │
 ├───────────────┬─────────┬──────────────┬──────────────────────────────────┤
 │ ADD           │ 0x10    │ RDST, RSRC   │ Add value from RSRC to RDST and  │
 │               │         │              │ store result in RDST             │
@@ -116,12 +116,10 @@ Flag register holds information about current CPU state:
 │ NOT           │ 0x18    │ RDST         │ Negate value stored in RDST      │
 ├───────────────┼─────────┼──────────────┼──────────────────────────────────┤
 │ SHL           │ 0x19    │ RDST         │ Shift left bits in RDST          │
-│               │         │              │                                  │
 ├───────────────┼─────────┼──────────────┼──────────────────────────────────┤
 │ SHR           │ 0x1A    │ RDST         │ Shift right bits in RDST         │
-│               │         │              │                                  │
 ├───────────────┴─────────┴──────────────┴──────────────────────────────────┤
-│                   Comparisions and conditionals jumps                     │ 
+│                  Comparisions and conditionals jumps                      │
 ├───────────────┬─────────┬──────────────┬──────────────────────────────────┤
 │ CMP           │ 0x20    │ RDST, RSRC   │ Checks if substraction of RSRC   │
 │               │         │              │ from RDST is equal 0. If yes it  │
@@ -155,13 +153,13 @@ Flag register holds information about current CPU state:
 │               │         │              │ (PC + immv mod 2^8).             │
 │               │         │              │ Otherwise do nothing.            │
 ├───────────────┴─────────┴──────────────┴──────────────────────────────────┤
-│                            Stack handling                                 │ 
+│                            Stack handling                                 │
 ├───────────────┬─────────┬──────────────┬──────────────────────────────────┤
 │ PUSH          │ 0x30    │ RSRC         │ Push value from RSRC onto stack. │
 ├───────────────┼─────────┼──────────────┼──────────────────────────────────┤
 │ POP           │ 0x31    │ RDST         │ Pop value from stack to RDST.    │
 ├───────────────┴─────────┴──────────────┴──────────────────────────────────┤
-│                 Unconditional jumps and function calls                    │ 
+│                 Unconditional jumps and function calls                    │
 ├───────────────┬─────────┬──────────────┬──────────────────────────────────┤
 │ JMP           │ 0x40    │ immv         │ Jump to addrres relative to immv.│
 │               │         │              │ (PC + immv mod 2^8)              │
@@ -184,5 +182,30 @@ Flag register holds information about current CPU state:
 │ HALT          │ 0xFF    │              │ Stop executing further           │
 │               │         │              │ instructions                     │
 ╘═══════════════╧═════════╧══════════════╧══════════════════════════════════╛
+
+```
+## Central Processing Unit Registers Identifiers
+
+```
+ General registers       Interrupt registers    CPU operating registers
+╒══════════╤══════╕      ╒══════════╤══════╕      ╒══════════╤══════╕
+│ Register │ Id   │      │ Register │ Id   │      │ Register │ Id   │
+╞══════════╪══════╡      ╞══════════╪══════╡      ╞══════════╪══════╡
+│ R0       │ 0x00 │      │ I0       │ 0x10 │      │ IE       │ 0xFC │
+├──────────┼──────┤      ├──────────┼──────┤      ├──────────┼──────┤
+│ R1       │ 0x01 │      │ I1       │ 0x11 │      │ FR       │ 0xFD │ 
+├──────────┼──────┤      ├──────────┼──────┤      ├──────────┼──────┤ 
+│ R2       │ 0x02 │      │ I2       │ 0x12 │      │ SP       │ 0xFE │ 
+├──────────┼──────┤      ├──────────┼──────┤      ├──────────┼──────┤
+│ R3       │ 0x03 │      │ I3       │ 0x13 │      │ PC       │ 0xFF │
+├──────────┼──────┤      ├──────────┼──────┤      ╘══════════╧══════╛
+│ R4       │ 0x04 │      │ I4       │ 0x14 │     
+├──────────┼──────┤      ├──────────┼──────┤     
+│ R5       │ 0x05 │      │ I5       │ 0x15 │     
+├──────────┼──────┤      ├──────────┼──────┤     
+│ R6       │ 0x06 │      │ I6       │ 0x16 │     
+├──────────┼──────┤      ├──────────┼──────┤     
+│ R7       │ 0x07 │      │ I7       │ 0x17 │     
+╘══════════╧══════╛      ╘══════════╧══════╛     
 
 ```
