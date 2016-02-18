@@ -24,7 +24,7 @@ class DecomplierTests(unittest.TestCase):
 		result = self.decompiler.getDecompiled()
 		self.assertEqual(result, "MOV R1, R2")
 
-	def testIfItsNotPutCommaBetweenTwoOperands(self):
+	def testIfItsNotPutCommaBetweenMnemonicInstructionAndFirstOperand(self):
 		self.decompiler.load([0x18, 0x01])
 		self.decompiler.run()
 		result = self.decompiler.getDecompiled()

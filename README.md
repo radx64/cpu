@@ -5,15 +5,15 @@ The purpose of this project is to implement simple virtual machine, which is cap
 CPU specific machine code and compiler capable of assembling mnemonic code to machine one.
 Project is written in Python 3. 
 
+Travis status: 
+[![Build Status](https://travis-ci.org/radx64/cpu.svg?branch=master)](https://travis-ci.org/radx64/cpu)
+
 ## Project parts
 * [ ] CPU design - ongoing
 * [X] Decompiler implementation (only need to extend mnemonic LUT after CPU design finish)
 * [ ] Virtual machine implementation
 * [ ] Compiler implementation
 * [ ] Example programs
-
-Travis status: 
-[![Build Status](https://travis-ci.org/radx64/cpu.svg?branch=master)](https://travis-ci.org/radx64/cpu)
 
 ## Virtual Machine design
 ```
