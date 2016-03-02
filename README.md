@@ -209,3 +209,10 @@ Flag register holds information about current CPU state:
 ╘══════════╧══════╛      ╘══════════╧══════╛     
 
 ```
+
+## Running tests
+
+In root directory of project just run:
+``
+nosetests
+``
