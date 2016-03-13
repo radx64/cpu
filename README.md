@@ -7,7 +7,7 @@ Project is written in Python 3.
 
 Travis status: 
 [![Build Status](https://travis-ci.org/radx64/cpu.svg?branch=master)](https://travis-ci.org/radx64/cpu)
-
+[![Coverage Status](https://coveralls.io/repos/github/radx64/cpu/badge.svg?branch=master)](https://coveralls.io/github/radx64/cpu?branch=master)
 ## Project parts
 * [ ] CPU design - ongoing
 * [X] Decompiler implementation (only need to extend mnemonic LUT after CPU design finish)
