@@ -1,3 +1,4 @@
 nose
 rednose
 nosexcover
+python-coveralls
