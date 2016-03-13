@@ -7,4 +7,6 @@ python:
 
 install: "pip install -r requirements.txt"
 
-script: nosetests --rednose -v
+script: nosetests --rednose --with-xcoverage
+after_success:
+  - coveralls
