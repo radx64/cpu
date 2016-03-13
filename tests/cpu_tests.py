@@ -39,18 +39,26 @@ class CpuTests(unittest.TestCase):
 	def test_IfCpuProgamCounterHaveCorrectValueAtBoot(self):
 		self.assertEquals(self.cpu.PC, 0x00)
 
-	def test_HALT_instructionHandling(self):
-		programm = [0xFF]
+	def test_IfSourceRegisterDecodingThrowsException(self):
+		programm = [0x00,0x00,0xAA]
+		self.assertRaises(Exception, self.cpu.run, programm)\
+
+	def test_IfDestinationRegisterDecodingThrowsException(self):
+		programm = [0x00,0xAA,0x00]
+		self.assertRaises(Exception, self.cpu.run, programm)
+
+	def test_MOV_instructionHandling(self):
+		self.cpu.R0 = 0xAB
+		programm = [0x00, 0x01, 0x00, 0xFF]
 		self.cpu.run(programm)
-		self.assertEquals(self.cpu.PC, 0x01)
+		self.assertEquals(self.cpu.R1, 0xAB)
 
 	def test_SET_instructionHandling(self):
 		programm = [0x01, 0x0, 0xAB, 0xFF]
 		self.cpu.run(programm);
 		self.assertEquals(self.cpu.R0, 0xAB)
 
-	def test_MOV_instructionHandling(self):
-		self.cpu.R0 = 0xAB
-		programm = [0x00, 0x01, 0x00, 0xFF] # SET and then MOV
+	def test_HALT_instructionHandling(self):
+		programm = [0xFF]
 		self.cpu.run(programm)
-		self.assertEquals(self.cpu.R1, 0xAB)
+		self.assertEquals(self.cpu.PC, 0x01)

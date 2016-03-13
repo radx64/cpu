@@ -111,7 +111,7 @@ class Cpu:
         elif id == 0xFF : 
             self.PC = value
         else :
-            print ("Unknown register " + str(id))
+            raise Exception("Unknown register " + str(id))
 
     def __getRegisterValueById(self, id):
         print ("Will get register {0}".format(id))
@@ -157,8 +157,7 @@ class Cpu:
         elif id == 0xFF : 
             return self.PC
         else :
-            print ("Unknown register " + str(id))
-            return 0xFF
+            raise Exception("Unknown register " + str(id))
 
     def __MOV(self):
         destinationRegisterId = self.__fetchNextByteFromRom()
@@ -238,4 +237,4 @@ class Cpu:
                 self.opcodeToHandlerMapping[instruction]() 
             except Exception as e: 
                 print (e)
-                raise e
+                raise Exception(e)
