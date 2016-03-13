@@ -107,6 +107,93 @@ class CpuTests(unittest.TestCase):
 		self.assertEquals(self.cpu.R0, 0xFF)
 		self.assertEquals(self.cpu.FR, 0x02)  # carry bit set
 
+	def test_MUL_instructionHandling(self):
+		self.cpu.R0 = 0x02
+		self.cpu.R1 = 0x03
+		programm = [0x12, 0x00, 0x01, 0xFF]
+		self.cpu.run(programm)
+		self.assertEquals(self.cpu.R0, 0x06)
+
+	def test_MUL_instructionHandlingCarryFlag(self):
+		self.cpu.R0 = 0xFF
+		self.cpu.R1 = 0x02
+		programm = [0x12, 0x00, 0x01, 0xFF]
+		self.cpu.run(programm)
+		self.assertEquals(self.cpu.R0, 0xFE)
+		self.assertEquals(self.cpu.FR, 0x02)  # carry bit set
+
+	def test_DIV_instructionHandling(self):
+		self.cpu.R0 = 0x06
+		self.cpu.R1 = 0x02
+		programm = [0x13, 0x00, 0x01, 0xFF]
+		self.cpu.run(programm)
+		self.assertEquals(self.cpu.R0, 0x03)
+
+	def test_DIV_instructionHandlingThrowsWhenDividingBy0(self):
+		self.cpu.R0 = 0x06
+		self.cpu.R1 = 0x00
+		programm = [0x13, 0x00, 0x01, 0xFF]
+		self.assertRaises(Exception, self.cpu.run, programm)
+
+	def test_MOD_instructionHandling(self):
+		self.cpu.R0 = 0x07
+		self.cpu.R1 = 0x02
+		programm = [0x14, 0x00, 0x01, 0xFF]
+		self.cpu.run(programm)
+		self.assertEquals(self.cpu.R0, 0x01)
+
+	def test_MOD_instructionHandlingThrowsWhenDividingBy0(self):
+		self.cpu.R0 = 0x06
+		self.cpu.R1 = 0x00
+		programm = [0x14, 0x00, 0x01, 0xFF]
+		self.assertRaises(Exception, self.cpu.run, programm)
+
+	def test_OR_instructionHandling(self):
+		self.cpu.R0 = 0x02
+		self.cpu.R1 = 0x01
+		programm = [0x15, 0x00, 0x01, 0xFF]
+		self.cpu.run(programm)
+		self.assertEquals(self.cpu.R0, 0x03)
+
+	def test_AND_instructionHandling(self):
+		self.cpu.R0 = 0x02
+		self.cpu.R1 = 0x01
+		programm = [0x16, 0x00, 0x01, 0xFF]
+		self.cpu.run(programm)
+		self.assertEquals(self.cpu.R0, 0x00)
+
+	def test_XOR_instructionHandling(self):
+		self.cpu.R0 = 0x03
+		self.cpu.R1 = 0x01
+		programm = [0x17, 0x00, 0x01, 0xFF]
+		self.cpu.run(programm)
+		self.assertEquals(self.cpu.R0, 0x02)
+
+	def test_NOT_instructionHandling(self):
+		self.cpu.R0 = 0xAA
+		programm = [0x18, 0x00, 0xFF]
+		self.cpu.run(programm)
+		self.assertEquals(self.cpu.R0, 0x55)
+
+	def test_SHL_instructionHandling(self):
+		self.cpu.R0 = 0x01
+		programm = [0x19, 0x00, 0xFF]
+		self.cpu.run(programm)
+		self.assertEquals(self.cpu.R0, 0x02)
+
+	def test_SHL_instructionHandlingCarryFlag(self):
+		self.cpu.R0 = 0xFF
+		programm = [0x19, 0x00, 0xFF]
+		self.cpu.run(programm)
+		self.assertEquals(self.cpu.R0, 0xFE)
+		self.assertEquals(self.cpu.FR, 0x02)  # carry bit set
+
+	def test_SHR_instructionHandling(self):
+		self.cpu.R0 = 0x04
+		programm = [0x1A, 0x00, 0xFF]
+		self.cpu.run(programm)
+		self.assertEquals(self.cpu.R0, 0x02)
+
 	def test_HALT_instructionHandling(self):
 		programm = [0xFF]
 		self.cpu.run(programm)

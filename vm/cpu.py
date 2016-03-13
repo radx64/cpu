@@ -233,23 +233,81 @@ class Cpu:
         self.__setRegisterValueById(destinationRegisterId, result)
 
     def __MUL(self):
-        raise Exception("Not yet implemented instruction!")
+        self.__clearCarryFlag()
+        destinationRegisterId = self.__fetchNextByteFromRom()
+        sourceRegisterId = self.__fetchNextByteFromRom()
+        A = self.__getRegisterValueById(sourceRegisterId)
+        B = self.__getRegisterValueById(destinationRegisterId)
+        if A * B >= self.WORD_SIZE:
+            self.__setCarryFlag()
+        result = (A * B) % self.WORD_SIZE
+        self.__setRegisterValueById(destinationRegisterId, result)
+
     def __DIV(self):
-        raise Exception("Not yet implemented instruction!")
+        destinationRegisterId = self.__fetchNextByteFromRom()
+        sourceRegisterId = self.__fetchNextByteFromRom()
+        A = self.__getRegisterValueById(sourceRegisterId)
+        B = self.__getRegisterValueById(destinationRegisterId)
+        if A == 0:
+            raise Exception("Division by 0 error")
+        result = B // A
+        self.__setRegisterValueById(destinationRegisterId, result)
+
     def __MOD(self):
-        raise Exception("Not yet implemented instruction!")
+        destinationRegisterId = self.__fetchNextByteFromRom()
+        sourceRegisterId = self.__fetchNextByteFromRom()
+        A = self.__getRegisterValueById(sourceRegisterId)
+        B = self.__getRegisterValueById(destinationRegisterId)
+        if A == 0:
+            raise Exception("Division by 0 error")
+        result = B % A
+        self.__setRegisterValueById(destinationRegisterId, result)
+
     def __OR(self):
-        raise Exception("Not yet implemented instruction!")
+        destinationRegisterId = self.__fetchNextByteFromRom()
+        sourceRegisterId = self.__fetchNextByteFromRom()
+        A = self.__getRegisterValueById(sourceRegisterId)
+        B = self.__getRegisterValueById(destinationRegisterId)
+        result = (B | A)
+        self.__setRegisterValueById(destinationRegisterId, result)
+
     def __AND(self):
-        raise Exception("Not yet implemented instruction!")
+        destinationRegisterId = self.__fetchNextByteFromRom()
+        sourceRegisterId = self.__fetchNextByteFromRom()
+        A = self.__getRegisterValueById(sourceRegisterId)
+        B = self.__getRegisterValueById(destinationRegisterId)
+        result = (B & A)
+        self.__setRegisterValueById(destinationRegisterId, result)
+
     def __XOR(self):
-        raise Exception("Not yet implemented instruction!")
+        destinationRegisterId = self.__fetchNextByteFromRom()
+        sourceRegisterId = self.__fetchNextByteFromRom()
+        A = self.__getRegisterValueById(sourceRegisterId)
+        B = self.__getRegisterValueById(destinationRegisterId)
+        result = (B ^ A)
+        self.__setRegisterValueById(destinationRegisterId, result)
+
     def __NOT(self):
-        raise Exception("Not yet implemented instruction!")
+        destinationRegisterId = self.__fetchNextByteFromRom()
+        A = self.__getRegisterValueById(destinationRegisterId)
+        result = (~ A) % self.WORD_SIZE
+        self.__setRegisterValueById(destinationRegisterId, result)
+
     def __SHL(self):
-        raise Exception("Not yet implemented instruction!")
+        destinationRegisterId = self.__fetchNextByteFromRom()
+        A = self.__getRegisterValueById(destinationRegisterId)
+        result = (A << 1) 
+        if result >= self.WORD_SIZE :
+            result %= self.WORD_SIZE
+            self.__setCarryFlag()
+        self.__setRegisterValueById(destinationRegisterId, result)
+
     def __SHR(self):
-        raise Exception("Not yet implemented instruction!")
+        destinationRegisterId = self.__fetchNextByteFromRom()
+        A = self.__getRegisterValueById(destinationRegisterId)
+        result = (A >> 1) 
+        self.__setRegisterValueById(destinationRegisterId, result)
+        
     def __CMP(self):
         raise Exception("Not yet implemented instruction!")
     def __JZ(self):
@@ -286,7 +344,7 @@ class Cpu:
         self.running = True
         while self.running: 
             instruction = self.__fetchNextByteFromRom()
-            print ("[DEBUG] Executing: " + str(instruction))
+            print ("[DEBUG] Executing instruction: 0x{0:02X}".format(instruction))
             try:
                 self.opcodeToHandlerMapping[instruction]() 
             except Exception as e: 
