@@ -182,6 +182,7 @@ Flag register holds information about current CPU state:
 │ HALT          │ 0xFF    │              │ Stop executing further           │
 │               │         │              │ instructions                     │
 ╘═══════════════╧═════════╧══════════════╧══════════════════════════════════╛
+ to be continued (no externals devices and interrupts support instructions)
 
 ```
 ## Central Processing Unit Registers Identifiers
