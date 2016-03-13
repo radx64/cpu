@@ -232,7 +232,6 @@ class Cpu:
             result = self.WORD_SIZE - B
         self.__setRegisterValueById(destinationRegisterId, result)
 
-
     def __MUL(self):
         raise Exception("Not yet implemented instruction!")
     def __DIV(self):

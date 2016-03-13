@@ -11,7 +11,7 @@ Travis status:
 ## Project parts
 * [ ] CPU design - ongoing
 * [X] Decompiler implementation (only need to extend mnemonic LUT after CPU design finish)
-* [ ] Virtual machine implementation
+* [ ] Virtual machine implementation - ongoing
 * [ ] Compiler implementation
 * [ ] Example programs
 
