@@ -51,44 +51,126 @@ class Cpu:
             0x41 : self.__JMPR,
             0x42 : self.__CALL,
             0x43 : self.__CALR,
-            0x44 : self.__RET }
-
-    def _getidToRegisterMapping(self):
-        return {
-            0x00 : self.R0,
-            0x01 : self.R1,
-            0x02 : self.R2,
-            0x03 : self.R3,
-            0x04 : self.R4,
-            0x05 : self.R5,
-            0x06 : self.R6,
-            0x07 : self.R7,
-            0x10 : self.I0,
-            0x11 : self.I1,
-            0x12 : self.I2,
-            0x13 : self.I3,
-            0x14 : self.I4,
-            0x15 : self.I5,
-            0x16 : self.I6,
-            0x17 : self.I7,
-            0xFC : self.IE,
-            0xFD : self.FR,
-            0xFE : self.SP,
-            0xFF : self.PC}
+            0x44 : self.__RET,
+            0xFF : self.__HALT }
     
-    def __init__(self, ram, rom, terminal):
-        print ("Cpu created.")
+    def __init__(self, ram, terminal):
         self.ram = ram
-        self.rom = rom
+        self.rom = []
+        self.running = False
         self.terminal = terminal
         self._initRegisters()
         self.opcodeToHandlerMapping = self._getOpcodeToHandlerMapping()
-        self.idToRegisterMapping = self._getidToRegisterMapping()
+
+    def __fetchNextByteFromRom(self):
+        byte = self.rom[self.PC]
+        self.PC += 1
+        return byte
+
+    def __setRegisterValueById(self, id, value):
+        print ("Will set register {0}, with {1}".format(id,value))
+
+        if id == 0x00 : 
+            self.R0 = value
+        elif id == 0x01 : 
+            self.R1 = value
+        elif id == 0x02 : 
+            self.R2 = value
+        elif id == 0x03 : 
+            self.R3 = value
+        elif id == 0x04 : 
+            self.R4 = value
+        elif id == 0x05 : 
+            self.R5 = value
+        elif id == 0x06 : 
+            self.R6 = value
+        elif id == 0x07 : 
+            self.R7 = value
+        elif id == 0x10 : 
+            self.I0 = value
+        elif id == 0x11 : 
+            self.I1 = value
+        elif id == 0x12 : 
+            self.I2 = value
+        elif id == 0x13 : 
+            self.I3 = value
+        elif id == 0x14 : 
+            self.I4 = value
+        elif id == 0x15 : 
+            self.I5 = value
+        elif id == 0x16 : 
+            self.I6 = value
+        elif id == 0x17 : 
+            self.I7 = value
+        elif id == 0xFC : 
+            self.IE = value
+        elif id == 0xFD : 
+            self.FR = value
+        elif id == 0xFE : 
+            self.SP = value
+        elif id == 0xFF : 
+            self.PC = value
+        else :
+            print ("Unknown register " + str(id))
+
+    def __getRegisterValueById(self, id):
+        print ("Will get register {0}".format(id))
+
+        if id == 0x00 : 
+            return self.R0
+        elif id == 0x01 : 
+            return self.R1
+        elif id == 0x02 : 
+            return self.R2
+        elif id == 0x03 : 
+            return self.R3
+        elif id == 0x04 : 
+            return self.R4
+        elif id == 0x05 : 
+            return self.R5
+        elif id == 0x06 : 
+            return self.R6
+        elif id == 0x07 : 
+            return self.R7
+        elif id == 0x10 : 
+            return self.I0
+        elif id == 0x11 : 
+            return self.I1
+        elif id == 0x12 : 
+            return self.I2
+        elif id == 0x13 : 
+            return self.I3
+        elif id == 0x14 : 
+            return self.I4
+        elif id == 0x15 : 
+            return self.I5
+        elif id == 0x16 : 
+            return self.I6
+        elif id == 0x17 : 
+            return self.I7
+        elif id == 0xFC : 
+            return self.IE
+        elif id == 0xFD : 
+            return self.FR
+        elif id == 0xFE : 
+            return self.SP
+        elif id == 0xFF : 
+            return self.PC
+        else :
+            print ("Unknown register " + str(id))
+            return 0xFF
 
     def __MOV(self):
-        pass
+        destinationRegisterId = self.__fetchNextByteFromRom()
+        sourceRegisterId = self.__fetchNextByteFromRom()
+        value = self.__getRegisterValueById(sourceRegisterId)
+        self.__setRegisterValueById(destinationRegisterId, value)
+
     def __SET(self):
-        pass
+        registerId = self.__fetchNextByteFromRom()
+        constValue = self.__fetchNextByteFromRom()
+        self.__setRegisterValueById(registerId, constValue)
+
     def __LOAD(self):
         pass
     def __STOR(self):
@@ -142,8 +224,18 @@ class Cpu:
     def __CALR(self):
         pass
     def __RET(self):
-        pass 
+        pass
+    def __HALT(self):
+        self.running = False
 
-
-if __name__ == '__main__':
-    cpu = Cpu("RAM","ROM","TERMINAL")
+    def run(self, programm):
+        self.rom = programm
+        self.running = True
+        while self.running: 
+            instruction = self.__fetchNextByteFromRom()
+            print ("Executing: " + str(instruction))
+            try:
+                self.opcodeToHandlerMapping[instruction]() 
+            except Exception as e: 
+                print (e)
+                raise e
