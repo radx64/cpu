@@ -4,8 +4,8 @@ from vm.cpu import Cpu
 class CpuTests(unittest.TestCase):
 	def __init__(self, parameters):
 		unittest.TestCase.__init__(self, parameters)
-		self.ram = [0x00] * 256;
-		self.cpu = Cpu(self.ram, None) # (RAM, ROM, TERMINAL) NotYetImpl
+		self.ram = [0x00] * 256;	# so much blocks of memory :)
+		self.cpu = Cpu(self.ram, None) # (RAM, TERMINAL NotYetImpl
 
 	def test_IfCpuGeneralRegistersHaveCorrectValuesAtFirstBoot(self):
 		self.assertEquals(self.cpu.R0, 0x00)
@@ -47,6 +47,11 @@ class CpuTests(unittest.TestCase):
 		programm = [0x00,0xAA,0x00]
 		self.assertRaises(Exception, self.cpu.run, programm)
 
+	def test_IfMemoryAddressingThrowExceptionForStrageAddressSpaceAccess(self):
+		self.cpu.R0 = -0xFF
+		programm = [0x02, 0x01, 0x00, 0xFF]
+		self.assertRaises(Exception, self.cpu.run, programm)
+
 	def test_MOV_instructionHandling(self):
 		self.cpu.R0 = 0xAB
 		programm = [0x00, 0x01, 0x00, 0xFF]
@@ -54,9 +59,23 @@ class CpuTests(unittest.TestCase):
 		self.assertEquals(self.cpu.R1, 0xAB)
 
 	def test_SET_instructionHandling(self):
-		programm = [0x01, 0x0, 0xAB, 0xFF]
+		programm = [0x01, 0x00, 0xAB, 0xFF]
 		self.cpu.run(programm);
 		self.assertEquals(self.cpu.R0, 0xAB)
+
+	def test_LOAD_instructionHandling(self):
+		self.ram[0xFF] = 0xAB
+		self.cpu.R0 = 0xFF
+		programm = [0x02, 0x01, 0x00, 0xFF]
+		self.cpu.run(programm);
+		self.assertEquals(self.cpu.R1, 0xAB)
+
+	def test_STOR_instructionHandling(self):
+		self.cpu.R0 = 0xAB
+		self.cpu.R1 = 0xFF
+		programm = [0x03, 0x01, 0x00, 0xFF]
+		self.cpu.run(programm);
+		self.assertEquals(self.ram[0xFF], 0xAB)
 
 	def test_HALT_instructionHandling(self):
 		programm = [0xFF]

@@ -68,7 +68,7 @@ class Cpu:
         return byte
 
     def __setRegisterValueById(self, id, value):
-        print ("Will set register {0}, with {1}".format(id,value))
+        print ("[DEBUG] Setting register {0}, with {1}".format(id,value))
 
         if id == 0x00 : 
             self.R0 = value
@@ -114,7 +114,7 @@ class Cpu:
             raise Exception("Unknown register " + str(id))
 
     def __getRegisterValueById(self, id):
-        print ("Will get register {0}".format(id))
+        print ("[DEBUG] Fetching register {0}".format(id))
 
         if id == 0x00 : 
             return self.R0
@@ -159,6 +159,19 @@ class Cpu:
         else :
             raise Exception("Unknown register " + str(id))
 
+    def __validateAddress(self, address):
+        if address >= len(self.ram) or address < 0:
+            raise Exception ("Address 0x{0:02X} points outside memory "
+                "address space (avail. 0x00-0x{1:02X})".format(address, len(self.ram)-1))    
+
+    def __getMemoryValueAt(self, address):
+        self.__validateAddress(address)
+        return self.ram[address]
+
+    def __setMemoryValueAt(self, address, value):
+        self.__validateAddress(address)
+        self.ram[address] = value
+
     def __MOV(self):
         destinationRegisterId = self.__fetchNextByteFromRom()
         sourceRegisterId = self.__fetchNextByteFromRom()
@@ -171,9 +184,19 @@ class Cpu:
         self.__setRegisterValueById(registerId, constValue)
 
     def __LOAD(self):
-        pass
+        destinationRegisterId = self.__fetchNextByteFromRom()
+        sourceRegisterId = self.__fetchNextByteFromRom()
+        memoryAddress = self.__getRegisterValueById(sourceRegisterId)
+        memoryValue = self.__getMemoryValueAt(memoryAddress)
+        self.__setRegisterValueById(destinationRegisterId, memoryValue)
+
     def __STOR(self):
-        pass
+        destinationRegisterId = self.__fetchNextByteFromRom()
+        sourceRegisterId = self.__fetchNextByteFromRom()
+        memoryAddress = self.__getRegisterValueById(destinationRegisterId)
+        memoryValue = self.__getRegisterValueById(sourceRegisterId)
+        self.__setMemoryValueAt(memoryAddress, memoryValue)
+        
     def __ADD(self):
         pass
     def __SUB(self):
@@ -232,7 +255,7 @@ class Cpu:
         self.running = True
         while self.running: 
             instruction = self.__fetchNextByteFromRom()
-            print ("Executing: " + str(instruction))
+            print ("[DEBUG] Executing: " + str(instruction))
             try:
                 self.opcodeToHandlerMapping[instruction]() 
             except Exception as e: 
