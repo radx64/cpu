@@ -77,6 +77,36 @@ class CpuTests(unittest.TestCase):
 		self.cpu.run(programm);
 		self.assertEquals(self.ram[0xFF], 0xAB)
 
+	def test_ADD_instructionHandling(self):
+		self.cpu.R0 = 0x01
+		self.cpu.R1 = 0x02
+		programm = [0x10, 0x00, 0x01, 0xFF]
+		self.cpu.run(programm)
+		self.assertEquals(self.cpu.R0, 0x03)
+
+	def test_ADD_instructionHandlingCarryFlag(self):
+		self.cpu.R0 = 0x01
+		self.cpu.R1 = 0xFF
+		programm = [0x10, 0x00, 0x01, 0xFF]
+		self.cpu.run(programm)
+		self.assertEquals(self.cpu.R0, 0x00)
+		self.assertEquals(self.cpu.FR, 0x02)  # carry bit set
+
+	def test_SUB_instructionHandling(self):
+		self.cpu.R0 = 0x02
+		self.cpu.R1 = 0x01
+		programm = [0x11, 0x00, 0x01, 0xFF]
+		self.cpu.run(programm)
+		self.assertEquals(self.cpu.R0, 0x01)
+
+	def test_SUB_instructionHandlingCarryFlag(self):
+		self.cpu.R0 = 0x01
+		self.cpu.R1 = 0x02
+		programm = [0x11, 0x00, 0x01, 0xFF]
+		self.cpu.run(programm)
+		self.assertEquals(self.cpu.R0, 0xFF)
+		self.assertEquals(self.cpu.FR, 0x02)  # carry bit set
+
 	def test_HALT_instructionHandling(self):
 		programm = [0xFF]
 		self.cpu.run(programm)

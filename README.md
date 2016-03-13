@@ -92,7 +92,7 @@ Flag register holds information about current CPU state:
 │ ADD           │ 0x10    │ RDST, RSRC   │ Add value from RSRC to RDST and  │
 │               │         │              │ store result in RDST             │
 ├───────────────┼─────────┼──────────────┼──────────────────────────────────┤
-│ SUB           │ 0x11    │ RDST, RSRC   │ Subtract value of RSTC from RDST │
+│ SUB           │ 0x11    │ RDST, RSRC   │ Subtract value of RSRC from RDST │
 │               │         │              │ and store result in RDST         │
 ├───────────────┼─────────┼──────────────┼──────────────────────────────────┤
 │ MUL           │ 0x12    │ RDST, RSRC   │ Multiply value of RDST by RSRC   │

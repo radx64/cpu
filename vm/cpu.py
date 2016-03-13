@@ -1,4 +1,10 @@
 class Cpu:
+    
+    WORD_SIZE = 1 << 8
+
+    CARRY_FLAG = 1 << 1
+    ZERO_FLAG = 1 << 0
+
     def _initRegisters(self):
         self.R0 = 0x00;
         self.R1 = 0x00;
@@ -172,6 +178,12 @@ class Cpu:
         self.__validateAddress(address)
         self.ram[address] = value
 
+    def __setCarryFlag(self):
+        self.FR = self.FR | self.CARRY_FLAG
+
+    def __clearCarryFlag(self):
+        self.FR = self.FR & (~self.CARRY_FLAG)
+
     def __MOV(self):
         destinationRegisterId = self.__fetchNextByteFromRom()
         sourceRegisterId = self.__fetchNextByteFromRom()
@@ -196,57 +208,77 @@ class Cpu:
         memoryAddress = self.__getRegisterValueById(destinationRegisterId)
         memoryValue = self.__getRegisterValueById(sourceRegisterId)
         self.__setMemoryValueAt(memoryAddress, memoryValue)
-        
+
     def __ADD(self):
-        pass
+        self.__clearCarryFlag()
+        destinationRegisterId = self.__fetchNextByteFromRom()
+        sourceRegisterId = self.__fetchNextByteFromRom()
+        A = self.__getRegisterValueById(sourceRegisterId)
+        B = self.__getRegisterValueById(destinationRegisterId)
+        if A + B >= self.WORD_SIZE:
+            self.__setCarryFlag()
+        result = (A + B) % self.WORD_SIZE
+        self.__setRegisterValueById(destinationRegisterId, result)
+
     def __SUB(self):
-        pass
+        self.__clearCarryFlag()
+        destinationRegisterId = self.__fetchNextByteFromRom()
+        sourceRegisterId = self.__fetchNextByteFromRom()
+        A = self.__getRegisterValueById(sourceRegisterId)
+        B = self.__getRegisterValueById(destinationRegisterId)
+        result = B - A
+        if result < 0:
+            self.__setCarryFlag()
+            result = self.WORD_SIZE - B
+        self.__setRegisterValueById(destinationRegisterId, result)
+
+
     def __MUL(self):
-        pass
+        raise Exception("Not yet implemented instruction!")
     def __DIV(self):
-        pass
+        raise Exception("Not yet implemented instruction!")
     def __MOD(self):
-        pass
+        raise Exception("Not yet implemented instruction!")
     def __OR(self):
-        pass
+        raise Exception("Not yet implemented instruction!")
     def __AND(self):
-        pass
+        raise Exception("Not yet implemented instruction!")
     def __XOR(self):
-        pass
+        raise Exception("Not yet implemented instruction!")
     def __NOT(self):
-        pass
+        raise Exception("Not yet implemented instruction!")
     def __SHL(self):
-        pass
+        raise Exception("Not yet implemented instruction!")
     def __SHR(self):
-        pass
+        raise Exception("Not yet implemented instruction!")
     def __CMP(self):
-        pass
+        raise Exception("Not yet implemented instruction!")
     def __JZ(self):
-        pass
+        raise Exception("Not yet implemented instruction!")
     def __JNZ(self):
-        pass
+        raise Exception("Not yet implemented instruction!")
     def __JC(self):
-        pass
+        raise Exception("Not yet implemented instruction!")
     def __JNC(self):
-        pass
+        raise Exception("Not yet implemented instruction!")
     def __JBE(self):
-        pass
+        raise Exception("Not yet implemented instruction!")
     def __JA(self):
-        pass
+        raise Exception("Not yet implemented instruction!")
     def __PUSH (self):
-        pass
+        raise Exception("Not yet implemented instruction!")
     def __POP(self):
-        pass
+        raise Exception("Not yet implemented instruction!")
     def __JMP(self):
-        pass
+        raise Exception("Not yet implemented instruction!")
     def __JMPR(self):
-        pass
+        raise Exception("Not yet implemented instruction!")
     def __CALL(self):
-        pass 
+        raise Exception("Not yet implemented instruction!") 
     def __CALR(self):
-        pass
+        raise Exception("Not yet implemented instruction!")
     def __RET(self):
-        pass
+        raise Exception("Not yet implemented instruction!")
     def __HALT(self):
         self.running = False
 
