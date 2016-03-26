@@ -1,31 +1,19 @@
-class Cpu:
-    
+class Cpu:    
     WORD_SIZE = 1 << 8
-
     CARRY_FLAG = 1 << 1
     ZERO_FLAG = 1 << 0
 
+    available_registers = {
+    "R0", "R1", "R2", "R3", "R4", "R5", "R6", "R7",
+    "I0", "I1", "I2", "I3", "I4", "I5", "I6", "I7",
+    "IE", "FR", "SP", "PC"
+    }
+
     def _initRegisters(self):
-        self.R0 = 0x00;
-        self.R1 = 0x00;
-        self.R2 = 0x00;
-        self.R3 = 0x00;
-        self.R4 = 0x00;
-        self.R5 = 0x00;
-        self.R6 = 0x00;
-        self.R7 = 0x00;
-        self.I0 = 0x00;
-        self.I1 = 0x00;
-        self.I2 = 0x00;
-        self.I3 = 0x00;
-        self.I4 = 0x00;
-        self.I5 = 0x00;
-        self.I6 = 0x00;
-        self.I7 = 0x00;
-        self.IE = 0x00;
-        self.FR = 0x00;
-        self.SP = 0xFF;
-        self.PC = 0x00;   
+        self.registers = {}
+        for register in self.available_registers:
+            self.registers[register] = 0;
+        self.registers["SP"] = 0xFF   
 
     def _getOpcodeToHandlerMapping(self):
         return {
@@ -59,6 +47,34 @@ class Cpu:
             0x43 : self.__CALR,
             0x44 : self.__RET,
             0xFF : self.__HALT }
+
+    @staticmethod
+    def __registerIdToName(registerId):
+        registerIdToName = {
+        0x00 : "R0",
+        0x01 : "R1",
+        0x02 : "R2",
+        0x03 : "R3",
+        0x04 : "R4",
+        0x05 : "R5",
+        0x06 : "R6",
+        0x07 : "R7",
+        0x10 : "I0",
+        0x11 : "I1",
+        0x12 : "I2",
+        0x13 : "I3",
+        0x14 : "I4",
+        0x15 : "I5",
+        0x16 : "I6",
+        0x17 : "I7",
+        0xFD : "FR",
+        0xFE : "SP",
+        0xFF : "PC",
+        }
+        try:
+            return registerIdToName[registerId]
+        except KeyError:
+            raise Exception("Unknown register " + str(id))
     
     def __init__(self, ram, terminal):
         self.ram = ram
@@ -69,101 +85,17 @@ class Cpu:
         self.opcodeToHandlerMapping = self._getOpcodeToHandlerMapping()
 
     def __fetchNextByteFromRom(self):
-        byte = self.rom[self.PC]
-        self.PC += 1
+        byte = self.rom[self.registers["PC"]]
+        self.registers["PC"] += 1
         return byte
 
     def __setRegisterValueById(self, id, value):
         print ("[DEBUG] Setting register {0}, with {1}".format(id,value))
-
-        if id == 0x00 : 
-            self.R0 = value
-        elif id == 0x01 : 
-            self.R1 = value
-        elif id == 0x02 : 
-            self.R2 = value
-        elif id == 0x03 : 
-            self.R3 = value
-        elif id == 0x04 : 
-            self.R4 = value
-        elif id == 0x05 : 
-            self.R5 = value
-        elif id == 0x06 : 
-            self.R6 = value
-        elif id == 0x07 : 
-            self.R7 = value
-        elif id == 0x10 : 
-            self.I0 = value
-        elif id == 0x11 : 
-            self.I1 = value
-        elif id == 0x12 : 
-            self.I2 = value
-        elif id == 0x13 : 
-            self.I3 = value
-        elif id == 0x14 : 
-            self.I4 = value
-        elif id == 0x15 : 
-            self.I5 = value
-        elif id == 0x16 : 
-            self.I6 = value
-        elif id == 0x17 : 
-            self.I7 = value
-        elif id == 0xFC : 
-            self.IE = value
-        elif id == 0xFD : 
-            self.FR = value
-        elif id == 0xFE : 
-            self.SP = value
-        elif id == 0xFF : 
-            self.PC = value
-        else :
-            raise Exception("Unknown register " + str(id))
+        self.registers[self.__registerIdToName(id)] = value
 
     def __getRegisterValueById(self, id):
         print ("[DEBUG] Fetching register {0}".format(id))
-
-        if id == 0x00 : 
-            return self.R0
-        elif id == 0x01 : 
-            return self.R1
-        elif id == 0x02 : 
-            return self.R2
-        elif id == 0x03 : 
-            return self.R3
-        elif id == 0x04 : 
-            return self.R4
-        elif id == 0x05 : 
-            return self.R5
-        elif id == 0x06 : 
-            return self.R6
-        elif id == 0x07 : 
-            return self.R7
-        elif id == 0x10 : 
-            return self.I0
-        elif id == 0x11 : 
-            return self.I1
-        elif id == 0x12 : 
-            return self.I2
-        elif id == 0x13 : 
-            return self.I3
-        elif id == 0x14 : 
-            return self.I4
-        elif id == 0x15 : 
-            return self.I5
-        elif id == 0x16 : 
-            return self.I6
-        elif id == 0x17 : 
-            return self.I7
-        elif id == 0xFC : 
-            return self.IE
-        elif id == 0xFD : 
-            return self.FR
-        elif id == 0xFE : 
-            return self.SP
-        elif id == 0xFF : 
-            return self.PC
-        else :
-            raise Exception("Unknown register " + str(id))
+        return self.registers[self.__registerIdToName(id)]
 
     def __validateAddress(self, address):
         if address >= len(self.ram) or address < 0:
@@ -179,10 +111,10 @@ class Cpu:
         self.ram[address] = value
 
     def __setCarryFlag(self):
-        self.FR = self.FR | self.CARRY_FLAG
+        self.registers["FR"] |= self.CARRY_FLAG
 
     def __clearCarryFlag(self):
-        self.FR = self.FR & (~self.CARRY_FLAG)
+        self.registers["FR"] &= (~self.CARRY_FLAG)
 
     def __MOV(self):
         destinationRegisterId = self.__fetchNextByteFromRom()
