@@ -198,3 +198,29 @@ class CpuTests(unittest.TestCase):
 		programm = [0xFF]
 		self.cpu.run(programm)
 		self.assertEquals(self.cpu.registers["PC"], 0x01)
+
+	def test_CMP_instructionHandlingZF(self):
+		programm = [0x20, 0x00, 0x01, 0xFF]
+		self.cpu.registers["R0"] = 0x2
+		self.cpu.registers["R1"] = 0x1
+		self.cpu.run(programm)
+		self.assertEquals(self.cpu.registers["FR"] & 0x01, 0x00)
+
+		programm = [0x20, 0x00, 0x01, 0xFF]
+		self.cpu.registers["R0"] = 0x1
+		self.cpu.registers["R1"] = 0x1
+		self.cpu.run(programm)
+		self.assertEquals(self.cpu.registers["FR"] & 0x01, 0x01)
+
+	def test_CMP_instructionHandlingCF(self):
+		programm = [0x20, 0x00, 0x01, 0xFF]
+		self.cpu.registers["R0"] = 0x2
+		self.cpu.registers["R1"] = 0x1
+		self.cpu.run(programm)
+		self.assertEquals(self.cpu.registers["FR"] & 0x02, 0x00)
+
+		programm = [0x20, 0x00, 0x01, 0xFF]
+		self.cpu.registers["R0"] = 0x1
+		self.cpu.registers["R1"] = 0x2
+		self.cpu.run(programm)
+		self.assertEquals(self.cpu.registers["FR"] & 0x02, 0x02)				

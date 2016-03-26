@@ -116,6 +116,12 @@ class Cpu:
     def __clearCarryFlag(self):
         self.registers["FR"] &= (~self.CARRY_FLAG)
 
+    def __setZeroFlag(self):
+        self.registers["FR"] |= self.ZERO_FLAG
+
+    def __clearZeroFlag(self):
+        self.registers["FR"] &= (~self.ZERO_FLAG)
+
     def __MOV(self):
         destinationRegisterId = self.__fetchNextByteFromRom()
         sourceRegisterId = self.__fetchNextByteFromRom()
@@ -176,6 +182,7 @@ class Cpu:
         self.__setRegisterValueById(destinationRegisterId, result)
 
     def __DIV(self):
+        self.__clearCarryFlag()
         destinationRegisterId = self.__fetchNextByteFromRom()
         sourceRegisterId = self.__fetchNextByteFromRom()
         A = self.__getRegisterValueById(sourceRegisterId)
@@ -241,7 +248,20 @@ class Cpu:
         self.__setRegisterValueById(destinationRegisterId, result)
         
     def __CMP(self):
-        raise Exception("Not yet implemented instruction!")
+        self.__clearCarryFlag()
+        self.__clearZeroFlag()
+        destinationRegisterId = self.__fetchNextByteFromRom()
+        sourceRegisterId = self.__fetchNextByteFromRom()
+        B = self.__getRegisterValueById(destinationRegisterId)
+        A = self.__getRegisterValueById(sourceRegisterId)
+        result = B - A
+        if result < 0:
+            self.__setCarryFlag()
+            result = self.WORD_SIZE - B
+        elif result == 0:
+            self.__setZeroFlag()
+        self.__setRegisterValueById(destinationRegisterId, result)
+
     def __JZ(self):
         raise Exception("Not yet implemented instruction!")
     def __JNZ(self):
@@ -272,6 +292,7 @@ class Cpu:
         self.running = False
 
     def run(self, programm):
+        self.registers["PC"] = 0
         self.rom = programm
         self.running = True
         while self.running: 
