@@ -31,6 +31,7 @@ opcodeToMnemonic = {
     0x42 : ("CALL", "I"), 
     0x43 : ("CALR", "R"),
     0x44 : ("RET",  "I"), 
+    0xFF : ("HALT", "")
 }
 
 generalRegisterIdToName = {
@@ -102,6 +103,8 @@ class Decompiler:
                     self._decodeRegister(index+operIndex)
                 elif operand == "I":
                     self._decodeConstant(index+operIndex)
+                elif operand == "":
+                    operandsCount -= 1
                 else:
                     raise Exception("Error! Unknown operand type in mnemonic Look Up Table")
                 if (operIndex < operandsCount-1):

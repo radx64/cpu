@@ -223,4 +223,11 @@ class CpuTests(unittest.TestCase):
 		self.cpu.registers["R0"] = 0x1
 		self.cpu.registers["R1"] = 0x2
 		self.cpu.run(programm)
-		self.assertEquals(self.cpu.registers["FR"] & 0x02, 0x02)				
+		self.assertEquals(self.cpu.registers["FR"] & 0x02, 0x02)	
+
+	def test_JZ_instructionHandling(self):
+		programm = [0x20, 0x00, 0x01, 0x21, 0x01, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF]
+		self.cpu.registers["R0"] = 0x1
+		self.cpu.registers["R1"] = 0x1
+		self.cpu.run(programm)
+		self.assertEquals(self.cpu.registers["PC"], 0x07)

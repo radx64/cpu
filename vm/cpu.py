@@ -122,6 +122,12 @@ class Cpu:
     def __clearZeroFlag(self):
         self.registers["FR"] &= (~self.ZERO_FLAG)
 
+    def __isZeroFlagSet(self):
+        return bool(self.registers["FR"] & self.ZERO_FLAG)
+
+    def __isCarryFlagSet(self):
+        return bool(self.registers["FR"] & self.CARRY_FLAG)
+
     def __MOV(self):
         destinationRegisterId = self.__fetchNextByteFromRom()
         sourceRegisterId = self.__fetchNextByteFromRom()
@@ -260,16 +266,18 @@ class Cpu:
             result = self.WORD_SIZE - B
         elif result == 0:
             self.__setZeroFlag()
-        self.__setRegisterValueById(destinationRegisterId, result)
 
     def __JZ(self):
-        raise Exception("Not yet implemented instruction!")
+        jumpOffset = self.__fetchNextByteFromRom()
+        if self.__isZeroFlagSet():
+            self.registers["PC"] = (self.registers["PC"] + jumpOffset) % self.WORD_SIZE 
+
     def __JNZ(self):
         raise Exception("Not yet implemented instruction!")
     def __JC(self):
         raise Exception("Not yet implemented instruction!")
     def __JNC(self):
-        raise Exception("Not yet implemented instruction!")
+        raise Exception("Not yet implemented instruction!")        
     def __JBE(self):
         raise Exception("Not yet implemented instruction!")
     def __JA(self):
