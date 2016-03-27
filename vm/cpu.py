@@ -281,9 +281,15 @@ class Cpu:
             self.__jumpOf(jumpOffset) 
 
     def __JC(self):
-        raise Exception("Not yet implemented instruction!")
+        jumpOffset = self.__fetchNextByteFromRom()
+        if self.__isCarryFlagSet():
+            self.__jumpOf(jumpOffset) 
+
     def __JNC(self):
-        raise Exception("Not yet implemented instruction!")        
+        jumpOffset = self.__fetchNextByteFromRom()
+        if not self.__isCarryFlagSet():
+            self.__jumpOf(jumpOffset)
+
     def __JBE(self):
         raise Exception("Not yet implemented instruction!")
     def __JA(self):
