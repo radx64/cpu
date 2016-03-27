@@ -36,6 +36,12 @@ class DecomplierTests(unittest.TestCase):
 		result = self.decompiler.getDecompiled()
 		self.assertEqual(result, "RET 0xFA")
 
+	def test__IfItCanHandleInstructionWithoutOperands(self):
+		self.decompiler.load([0xFF])
+		self.decompiler.run()
+		result = self.decompiler.getDecompiled()
+		self.assertEqual(result, "HALT")
+
 if __name__ == '__main__':
 	suite = unittest.TestLoader().loadTestsFromTestCase(DecomplierTests)
 	unittest.TextTestRunner(verbosity=2).run(suite)
