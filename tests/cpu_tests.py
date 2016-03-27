@@ -280,6 +280,11 @@ class CpuTests(unittest.TestCase):
 		self.assertEquals(self.cpu.registers["SP"], 0xFE)
 		self.assertEquals(self.cpu.ram[0xFE], 0xAB)
 
+	def test_PUSH_instructionHandlingThrowsWhenNoMoreSpace(self):
+		programm = [0x30, 0x00, 0xFF]
+		self.cpu.registers["SP"] = 0x00
+		self.assertRaises(Exception, self.cpu.run, programm)	
+
 	def test_POP_instructionHandling(self):
 		programm = [0x31, 0x00, 0xFF]
 		self.cpu.ram[0xFE] = 0xAB
@@ -287,3 +292,7 @@ class CpuTests(unittest.TestCase):
 		self.cpu.run(programm)
 		self.assertEquals(self.cpu.registers["R0"], 0xAB)
 		self.assertEquals(self.cpu.registers["SP"], 0xFF)
+
+	def test_POP_instructionHandlingThrowsWhenNothingMoreToPop(self):
+		programm = [0x31, 0x00, 0xFF]
+		self.assertRaises(Exception, self.cpu.run, programm)		
