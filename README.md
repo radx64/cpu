@@ -1,4 +1,4 @@
-# Small and simple, pure virtual CPU.
+# Small and simple, pure Virtual Machine.
 
 ## Rationale
 The purpose of this project is to implement simple virtual machine, which is capable to run 
@@ -6,7 +6,7 @@ CPU specific machine code and compiler capable of assembling mnemonic code to ma
 Project is written in Python 3. 
 
 Travis status: 
-[![Build Status](https://travis-ci.org/radx64/cpu.svg?branch=master)](https://travis-ci.org/radx64/cpu)
+[![Build Status](https://travis-ci.org/radx64/vm.svg?branch=master)](https://travis-ci.org/radx64/vm)
 [![Coverage Status](https://coveralls.io/repos/github/radx64/vm/badge.svg?branch=master)](https://coveralls.io/github/radx64/vm?branch=master)
 ## Project parts
 * [ ] CPU design - ongoing
