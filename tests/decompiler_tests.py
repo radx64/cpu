@@ -36,7 +36,7 @@ class DecomplierTests(unittest.TestCase):
 		result = self.decompiler.getDecompiled()
 		self.assertEqual(result, "RET 0xFA")
 
-	def test__IfItCanHandleInstructionWithoutOperands(self):
+	def test_IfItCanHandleInstructionWithoutOperands(self):
 		self.decompiler.load([0xFF])
 		self.decompiler.run()
 		result = self.decompiler.getDecompiled()
