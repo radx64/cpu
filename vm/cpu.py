@@ -267,15 +267,18 @@ class Cpu:
         elif result == 0:
             self.__setZeroFlag()
 
+    def __jumpOf(self, offset):
+        self.registers["PC"] = (self.registers["PC"] + offset) % self.WORD_SIZE 
+
     def __JZ(self):
         jumpOffset = self.__fetchNextByteFromRom()
         if self.__isZeroFlagSet():
-            self.registers["PC"] = (self.registers["PC"] + jumpOffset) % self.WORD_SIZE 
+            self.__jumpOf(jumpOffset) 
 
     def __JNZ(self):
         jumpOffset = self.__fetchNextByteFromRom()
         if not self.__isZeroFlagSet():
-            self.registers["PC"] = (self.registers["PC"] + jumpOffset) % self.WORD_SIZE 
+            self.__jumpOf(jumpOffset) 
 
     def __JC(self):
         raise Exception("Not yet implemented instruction!")
