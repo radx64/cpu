@@ -301,9 +301,21 @@ class Cpu:
             self.__jumpOf(jumpOffset)
 
     def __PUSH (self):
-        raise Exception("Not yet implemented instruction!")
+        sourceRegisterId = self.__fetchNextByteFromRom()
+        A = self.__getRegisterValueById(sourceRegisterId)
+        if(self.registers["SP"] == 0):
+            raise Exception("Stack pointer is already at 0x00. Can't move it further back.")
+        self.registers["SP"] -= 0x1
+        self.ram[self.registers["SP"]] = A
+
     def __POP(self):
-        raise Exception("Not yet implemented instruction!")
+        destinationRegisterId = self.__fetchNextByteFromRom()
+        if(self.registers["SP"] == 0xFF):
+            raise Exception("Stack pointer is already at 0xFF. Can't move it further.")
+        A = self.ram[self.registers["SP"]]
+        self.registers["SP"] += 0x1
+        self.__setRegisterValueById(destinationRegisterId, A)
+
     def __JMP(self):
         raise Exception("Not yet implemented instruction!")
     def __JMPR(self):

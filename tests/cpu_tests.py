@@ -272,3 +272,18 @@ class CpuTests(unittest.TestCase):
 		self.cpu.registers["R1"] = 0x2
 		self.cpu.run(programm)
 		self.assertEquals(self.cpu.registers["PC"], 0x07)
+
+	def test_PUSH_instructionHandling(self):
+		programm = [0x30, 0x00, 0xFF]
+		self.cpu.registers["R0"] = 0xAB
+		self.cpu.run(programm)
+		self.assertEquals(self.cpu.registers["SP"], 0xFE)
+		self.assertEquals(self.cpu.ram[0xFE], 0xAB)
+
+	def test_POP_instructionHandling(self):
+		programm = [0x31, 0x00, 0xFF]
+		self.cpu.ram[0xFE] = 0xAB
+		self.cpu.registers["SP"] = 0xFE
+		self.cpu.run(programm)
+		self.assertEquals(self.cpu.registers["R0"], 0xAB)
+		self.assertEquals(self.cpu.registers["SP"], 0xFF)
