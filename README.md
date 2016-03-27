@@ -148,9 +148,9 @@ Flag register holds information about current CPU state:
 │               │         │              │ immv (PC + immv mod 2^8).        │
 │               │         │              │ Otherwise do nothing.            │
 ├───────────────┼─────────┼──────────────┼──────────────────────────────────┤
-│ JA            │ 0x26    │ immv         │ If CF is set increase and ZF is  │
-│               │         │              │ not set increase PC of immv      │
-│               │         │              │ (PC + immv mod 2^8).             │
+│ JA            │ 0x26    │ immv         │ If CF is set and ZF is not set   │
+│               │         │              │ increase PC of immv (PC + immv   │
+│               │         │              │ mod 2^8).                        │
 │               │         │              │ Otherwise do nothing.            │
 ├───────────────┴─────────┴──────────────┴──────────────────────────────────┤
 │                            Stack handling                                 │
