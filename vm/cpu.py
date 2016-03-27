@@ -273,7 +273,10 @@ class Cpu:
             self.registers["PC"] = (self.registers["PC"] + jumpOffset) % self.WORD_SIZE 
 
     def __JNZ(self):
-        raise Exception("Not yet implemented instruction!")
+        jumpOffset = self.__fetchNextByteFromRom()
+        if not self.__isZeroFlagSet():
+            self.registers["PC"] = (self.registers["PC"] + jumpOffset) % self.WORD_SIZE 
+
     def __JC(self):
         raise Exception("Not yet implemented instruction!")
     def __JNC(self):
