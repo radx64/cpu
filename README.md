@@ -200,6 +200,13 @@ Flag register holds information about current CPU state:
 │ RET           │ 0x44    │              │ Get return address from stack and│
 │               │         │              │ jumps to it.                     │
 ├───────────────┴─────────┴──────────────┴──────────────────────────────────┤
+│                      Input / Output ports handling                        │
+├───────────────┬─────────┬──────────────┬──────────────────────────────────┤
+│ IN            │ 0x50    │ immv, RDST   │ Read value from port at address  │
+│               │         │              │ immv to RDST register            │
+├───────────────┼─────────┼──────────────┼──────────────────────────────────┤
+│ OUT           │ 0x51    │ immv, RSRC   │ Write value to port at address   │
+│               │         │              │ immv from RSRC register          │ ├───────────────┴─────────┴──────────────┴──────────────────────────────────┤
 │                              Stopping CPU                                 │ 
 ├───────────────┬─────────┬──────────────┬──────────────────────────────────┤
 │ HALT          │ 0xFF    │              │ Stop executing further           │
