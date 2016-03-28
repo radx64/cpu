@@ -120,12 +120,12 @@ Flag register holds information about current CPU state:
 ├───────────────┼─────────┼──────────────┼──────────────────────────────────┤
 │ SHR           │ 0x1A    │ RDST         │ Shift right bits in RDST         │
 ├───────────────┴─────────┴──────────────┴──────────────────────────────────┤
-│                  Comparisions and conditionals jumps                      │
+│                  Comparisons and conditionals jumps                       │
 ├───────────────┬─────────┬──────────────┬──────────────────────────────────┤
-│ CMP           │ 0x20    │ RDST, RSRC   │ Checks if substraction of RSRC   │
+│ CMP           │ 0x20    │ RDST, RSRC   │ Checks if subtraction of RSRC    │
 │               │         │              │ from RDST is equal 0. If yes it  │
 │               │         │              │ sets ZF bit in FR register to 1, │
-│               │         │              │ 0 otherwise. If substraction     │
+│               │         │              │ 0 otherwise. If subtraction      │
 │               │         │              │ gives negative value CF is set   │
 │               │         │              │ to 1, otherwise 0.               │
 ├───────────────┼─────────┼──────────────┼──────────────────────────────────┤
