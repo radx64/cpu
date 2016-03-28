@@ -46,6 +46,8 @@ class Cpu:
             0x42 : self.__CALL,
             0x43 : self.__CALR,
             0x44 : self.__RET,
+            0x50 : self.__IN,
+            0x51 : self.__OUT,
             0xFF : self.__HALT }
 
     @staticmethod
@@ -67,6 +69,7 @@ class Cpu:
         0x15 : "I5",
         0x16 : "I6",
         0x17 : "I7",
+        0xFC : "IE",
         0xFD : "FR",
         0xFE : "SP",
         0xFF : "PC",
@@ -347,11 +350,17 @@ class Cpu:
         functionPointer = self.__popFromStack()
         self.registers["PC"] = functionPointer
 
+    def __IN(self):
+        raise Exception("Instruction not implemented yet!")
+
+    def __OUT(self):
+        raise Exception("Instruction not implemented yet!")
+
     def __HALT(self):
         self.running = False
 
     def run(self, programm):
-        self.registers["PC"] = 0
+        self.registers["PC"] = 0x00
         self.rom = programm
         self.running = True
         while self.running: 
