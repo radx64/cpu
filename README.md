@@ -7,6 +7,7 @@ Project is written in Python 3.
 
 Travis status: 
 [![Build Status](https://travis-ci.org/radx64/vm.svg?branch=master)](https://travis-ci.org/radx64/vm)
+
 Coveralls status:
 [![Coverage Status](https://coveralls.io/repos/github/radx64/vm/badge.svg?branch=master)](https://coveralls.io/github/radx64/vm?branch=master)
 ## Project parts
