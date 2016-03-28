@@ -69,10 +69,10 @@ Flag register holds information about current CPU state:
 		 ^									  │
 		 |  	  Configuration port 		  │
 		 ╘----------------------------------->│
-						   Control Port      ╒═══╕
+						                     ╒═══╕
 ╒══════════════════╕         Data Port       │ I │
 │     Terminal     │ <---------------------->│ / │
-╘══════════════════╛                 		 │ O │
+╘══════════════════╛        Control Port	 │ O │
           .									 │   │
 		  .									 │ B │
 		  . 								 │ U │
