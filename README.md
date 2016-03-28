@@ -206,7 +206,8 @@ Flag register holds information about current CPU state:
 │               │         │              │ immv to RDST register            │
 ├───────────────┼─────────┼──────────────┼──────────────────────────────────┤
 │ OUT           │ 0x51    │ immv, RSRC   │ Write value to port at address   │
-│               │         │              │ immv from RSRC register          │ ├───────────────┴─────────┴──────────────┴──────────────────────────────────┤
+│               │         │              │ immv from RSRC register          │ 
+├───────────────┴─────────┴──────────────┴──────────────────────────────────┤
 │                              Stopping CPU                                 │ 
 ├───────────────┬─────────┬──────────────┬──────────────────────────────────┤
 │ HALT          │ 0xFF    │              │ Stop executing further           │
