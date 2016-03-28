@@ -165,17 +165,17 @@ Flag register holds information about current CPU state:
 │ JMP           │ 0x40    │ immv         │ Jump to addrres relative to immv.│
 │               │         │              │ (PC + immv mod 2^8)              │
 ├───────────────┼─────────┼──────────────┼──────────────────────────────────┤
-│ JMPR          │ 0x41    │ RSRC         │ Jump to addrres relative to addr │
+│ JMPR          │ 0x41    │ RSRC         │ Jump to addrres absolute         │
 │               │         │              │ in RSRC register.                │
-│               │         │              │ (PC + RSRC mod 2^8)              │
+│               │         │              │ (PC = RSRC)                      │
 ├───────────────┼─────────┼──────────────┼──────────────────────────────────┤
-│ CALL          │ 0x42    │ immv         │ Calls function from address immv.│
+│ CALL          │ 0x42    │ immv         │ Calls function relative to immv. │
 │               │         │              │                                  │
 ├───────────────┼─────────┼──────────────┼──────────────────────────────────┤
 │ CALR          │ 0x43    │ RSRC         │ Calls function from address in   │
 │               │         │              │ RSRC register.                   │
 ├───────────────┼─────────┼──────────────┼──────────────────────────────────┤
-│ RET           │ 0x44    │ RSRC         │ Get return address from stack and│
+│ RET           │ 0x44    │              │ Get return address from stack and│
 │               │         │              │ jumps to it.                     │
 ├───────────────┴─────────┴──────────────┴──────────────────────────────────┤
 │                              Stopping CPU                                 │ 

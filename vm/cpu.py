@@ -329,22 +329,24 @@ class Cpu:
 
     def __JMPR(self):
         sourceRegisterId = self.__fetchNextByteFromRom()
-        jumpOffset = self.__getRegisterValueById(sourceRegisterId)
-        self.__jumpOf(jumpOffset)
+        jumpAddress = self.__getRegisterValueById(sourceRegisterId)
+        self.registers["PC"] = jumpAddress
 
     def __CALL(self):
-        functionPointer = self.__fetchNextByteFromRom()
+        functionPointerOffset = self.__fetchNextByteFromRom()
         self.__pushToStack(self.registers["PC"])
-        self.__jumpOf(functionPointer)
+        self.__jumpOf(functionPointerOffset)
 
     def __CALR(self):
         sourceRegisterId = self.__fetchNextByteFromRom()
         functionPointer = self.__getRegisterValueById(sourceRegisterId)
         self.__pushToStack(self.registers["PC"])
-        self.__jumpOf(functionPointer)
+        self.registers["PC"] = functionPointer
 
     def __RET(self):
-        raise Exception("Not yet implemented instruction!")
+        functionPointer = self.__popFromStack()
+        self.registers["PC"] = functionPointer
+
     def __HALT(self):
         self.running = False
 
