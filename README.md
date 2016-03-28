@@ -57,15 +57,30 @@ Flag register holds information about current CPU state:
 
 ## Virtual machine block diagram
 ```
-╒══════════════════╕   In/Out Port   ╒══════════════════╕
-│     Terminal     │ <-------------> │     Central      │
-╘══════════════════╛                 │                  │
+							         ╒══════════════════╕
+							         │     Central      │
+							         │                  │
 ╒══════════════════╕   Memory bus    │                  │    Memory bus    ╒══════════════════╕
-│Random Access Mem.│ <-------------> │    Processing    │  <-------------> │ Read Only Memory │
+│Random Access Mem.│ <-------------> │    Processing    │  <-------------> │  Program memory  │
 ╘══════════════════╛                 │                  │                  ╘══════════════════╛
 ╒══════════════════╕ Interrupt line  │                  │
 │Progammable timer │ <-------------> │       Unit       │
 ╘══════════════════╛                 ╘══════════════════╛
+		 ^									  │
+		 |  	  Configuration port 		  │
+		 ╘----------------------------------->│
+						   Control Port      ╒═══╕
+╒══════════════════╕         Data Port       │ I │
+│     Terminal     │ <---------------------->│ / │
+╘══════════════════╛                 		 │ O │
+          .									 │   │
+		  .									 │ B │
+		  . 								 │ U │
+	more devices							 │ S │
+		  .									 ╘═══╛   	
+		  .									   │
+		  .									   V
+											
 ```
 ## Central Processing Unit Instruction Set Reference
 
