@@ -10,8 +10,14 @@ Travis status:
 Coveralls status:
 [![Coverage Status](https://coveralls.io/repos/github/radx64/vm/badge.svg?branch=master)](https://coveralls.io/github/radx64/vm?branch=master)
 ## Project parts
-* [ ] CPU design - ongoing
-* [X] Decompiler implementation (only need to extend mnemonic LUT after CPU design finish)
+* [ ] CPU design
+ - [X] Memory handling
+ - [X] Jumps
+ - [X] Function calls
+ - [ ] In/Out ports
+ - [ ] Interrupts
+
+* [X] Decompiler implementation
 * [ ] Virtual machine implementation - ongoing
 * [ ] Compiler implementation
 * [ ] Example programs
