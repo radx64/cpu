@@ -295,4 +295,15 @@ class CpuTests(unittest.TestCase):
 
 	def test_POP_instructionHandlingThrowsWhenNothingMoreToPop(self):
 		programm = [0x31, 0x00, 0xFF]
-		self.assertRaises(Exception, self.cpu.run, programm)		
+		self.assertRaises(Exception, self.cpu.run, programm)
+
+	def test_JMP_instructionHandling(self):
+		programm = [0x40, 0x03, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF]
+		self.cpu.run(programm)
+		self.assertEquals(self.cpu.registers["PC"], 0x06)
+
+	def test_JMPR_instructionHandling(self):
+		programm = [0x41, 0x00, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF]
+		self.cpu.registers["R0"] = 0x03
+		self.cpu.run(programm)
+		self.assertEquals(self.cpu.registers["PC"], 0x06)

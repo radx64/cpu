@@ -317,9 +317,14 @@ class Cpu:
         self.__setRegisterValueById(destinationRegisterId, A)
 
     def __JMP(self):
-        raise Exception("Not yet implemented instruction!")
+        jumpOffset = self.__fetchNextByteFromRom()
+        self.__jumpOf(jumpOffset)
+
     def __JMPR(self):
-        raise Exception("Not yet implemented instruction!")
+        sourceRegisterId = self.__fetchNextByteFromRom()
+        jumpOffset = self.__getRegisterValueById(sourceRegisterId)
+        self.__jumpOf(jumpOffset)
+
     def __CALL(self):
         raise Exception("Not yet implemented instruction!") 
     def __CALR(self):
