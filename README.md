@@ -227,6 +227,23 @@ Flag register holds information about current CPU state:
 
 ```
 
+## Connected devices ports addresses
+
+```
+╒═══════════════════════╤═══════════╕
+│ Device port           │ Address   │
+╞═══════════════════════╪═══════════╡
+│ PIT control           │ 0x00      │
+├───────────────────────┼───────────┤
+│ Terminal data in      │ 0x01      │ 
+├───────────────────────┼───────────┤ 
+│ Terminal control in   │ 0x02      │ 
+├───────────────────────┼───────────┤
+│ Terminal data out     │ 0x03      │
+├───────────────────────┼───────────┤
+│ Terminal control out  │ 0x04      │ 
+╘═══════════════════════╧═══════════╛ 
+```
 ## Running tests
 
 In root directory of project just run:
