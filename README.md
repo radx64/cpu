@@ -162,10 +162,10 @@ Flag register holds information about current CPU state:
 ├───────────────┴─────────┴──────────────┴──────────────────────────────────┤
 │                 Unconditional jumps and function calls                    │
 ├───────────────┬─────────┬──────────────┬──────────────────────────────────┤
-│ JMP           │ 0x40    │ immv         │ Jump to addrres relative to immv.│
+│ JMP           │ 0x40    │ immv         │ Jump to address relative to immv.│
 │               │         │              │ (PC + immv mod 2^8)              │
 ├───────────────┼─────────┼──────────────┼──────────────────────────────────┤
-│ JMPR          │ 0x41    │ RSRC         │ Jump to addrres absolute         │
+│ JMPR          │ 0x41    │ RSRC         │ Jump to address absolute         │
 │               │         │              │ in RSRC register.                │
 │               │         │              │ (PC = RSRC)                      │
 ├───────────────┼─────────┼──────────────┼──────────────────────────────────┤
