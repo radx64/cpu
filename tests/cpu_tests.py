@@ -307,3 +307,16 @@ class CpuTests(unittest.TestCase):
 		self.cpu.registers["R0"] = 0x03
 		self.cpu.run(programm)
 		self.assertEquals(self.cpu.registers["PC"], 0x06)
+
+	def test_CALL_instuctionHandling(self):
+		programm = [0x42, 0x04, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF]
+		self.cpu.run(programm)
+		self.assertEquals(self.cpu.registers["PC"], 0x07)
+		self.assertEquals(self.cpu.ram[0xFE], 0x02)
+
+	def test_CALR_instuctionHandling(self):
+		programm = [0x43, 0x00, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF]
+		self.cpu.registers["R0"] = 0x04
+		self.cpu.run(programm)
+		self.assertEquals(self.cpu.registers["PC"], 0x07)
+		self.assertEquals(self.cpu.ram[0xFE], 0x02)

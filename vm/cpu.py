@@ -300,20 +300,27 @@ class Cpu:
         if (self.__isCarryFlagSet() and (not self.__isZeroFlagSet())):
             self.__jumpOf(jumpOffset)
 
-    def __PUSH (self):
-        sourceRegisterId = self.__fetchNextByteFromRom()
-        A = self.__getRegisterValueById(sourceRegisterId)
+    def __pushToStack(self, value):
         if(self.registers["SP"] == 0):
             raise Exception("Stack pointer is already at 0x00. Can't move it further back.")
         self.registers["SP"] -= 0x1
-        self.ram[self.registers["SP"]] = A
+        self.ram[self.registers["SP"]] = value
 
-    def __POP(self):
-        destinationRegisterId = self.__fetchNextByteFromRom()
+    def __popFromStack(self):
         if(self.registers["SP"] == 0xFF):
             raise Exception("Stack pointer is already at 0xFF. Can't move it further.")
         A = self.ram[self.registers["SP"]]
         self.registers["SP"] += 0x1
+        return A        
+
+    def __PUSH (self):
+        sourceRegisterId = self.__fetchNextByteFromRom()
+        A = self.__getRegisterValueById(sourceRegisterId)
+        self.__pushToStack(A)
+
+    def __POP(self):
+        destinationRegisterId = self.__fetchNextByteFromRom()
+        A = self.__popFromStack()
         self.__setRegisterValueById(destinationRegisterId, A)
 
     def __JMP(self):
@@ -326,9 +333,16 @@ class Cpu:
         self.__jumpOf(jumpOffset)
 
     def __CALL(self):
-        raise Exception("Not yet implemented instruction!") 
+        functionPointer = self.__fetchNextByteFromRom()
+        self.__pushToStack(self.registers["PC"])
+        self.__jumpOf(functionPointer)
+
     def __CALR(self):
-        raise Exception("Not yet implemented instruction!")
+        sourceRegisterId = self.__fetchNextByteFromRom()
+        functionPointer = self.__getRegisterValueById(sourceRegisterId)
+        self.__pushToStack(self.registers["PC"])
+        self.__jumpOf(functionPointer)
+
     def __RET(self):
         raise Exception("Not yet implemented instruction!")
     def __HALT(self):
