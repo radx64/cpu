@@ -60,6 +60,8 @@ MnemonicToOpcode = {
     "HALT" : (0xFF, )
 }
 
+WORD_SIZE = 1 << 8
+
 class DecodeRegisterEx(Exception):
 	pass
 
@@ -118,7 +120,7 @@ class Compiler:
 						registerId = self.__decodeRegisterId(next(tokenizer))
 						result.append(registerId)
 					elif argumentType == "A":
-						address = self.__decodeLabelOrAddress(next(tokenizer))
+						address = self.__calculateRelativeJump(len(self.binary), self.__decodeLabelOrAddress(next(tokenizer)))
 						result.append(registerId)
 					else:
 						raise Exception("Internal compiler error. LUT wrong!")
@@ -146,11 +148,18 @@ class Compiler:
 		self.__resolveForwardLabels()
 		return self.binary
 
+	@staticmethod
+	def __calculateRelativeJump(current, desired):
+		if desired < current:
+			return WORD_SIZE - (desired + current)
+		else:
+			return desired - current
+
 	def __resolveForwardLabels(self):
 		for idx, element in enumerate(self.binary):
 			try:
 				if type(element) is str and not element.isdigit():
-					self.binary[idx] = self.__decodeLabelOrAddress(element)
+					self.binary[idx] = self.__calculateRelativeJump(idx, self.__decodeLabelOrAddress(element))
 			except Exception as e:
 				raise e
 
@@ -158,7 +167,7 @@ def main():
 	sourceCode = ("start:\n"
 				  "MOV R1, R2\n"
 				  "SHL R1 \n"
-				  "JMP end\n" 
+				  "JMP start\n" 
 				  "HALT\n"
 				  "HALT\n"
 				  "end:\n")
@@ -170,6 +179,7 @@ def main():
 		binary = compiler.compile(sourceCode)
 		print("Binary below:")
 		print(binary)
+		print("Found labels:")
 		print(compiler.labels)
 
 	except Exception as e:
