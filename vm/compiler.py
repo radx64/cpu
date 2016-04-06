@@ -23,6 +23,7 @@ RegisterToId = {
 
 # R - register name after instruction
 # I - constant value (immv)
+# A - relative address
 
 MnemonicToOpcode = {
     "MOV"  : (0x00, "R", "R"),
@@ -41,12 +42,12 @@ MnemonicToOpcode = {
     "SHL"  : (0x19, "R"),
     "SHR"  : (0x1A, "R"),
     "CMP"  : (0x20, "R", "R"),
-    "JZ"   : (0x21, "I"),
-    "JNZ"  : (0x22, "I"),
-    "JC"   : (0x23, "I"),
-    "JNC"  : (0x24, "I"),
-    "JBE"  : (0x25, "I"),
-    "JA"   : (0x26, "I"),
+    "JZ"   : (0x21, "A"),
+    "JNZ"  : (0x22, "A"),
+    "JC"   : (0x23, "A"),
+    "JNC"  : (0x24, "A"),
+    "JBE"  : (0x25, "A"),
+    "JA"   : (0x26, "A"),
     "PUSH" : (0x30, "R"), 
     "POP"  : (0x31, "R"),
     "JMP"  : (0x40, "I"), 
@@ -62,69 +63,115 @@ MnemonicToOpcode = {
 class DecodeRegisterEx(Exception):
 	pass
 
+class Compiler:
+	def __init__(self):
+		self.binary = list()
+		self.labels = dict()
 
-def tokenize(source):
-	sourcePreprocessed = source.replace(',','')
-	tokens = sourcePreprocessed.split()
-	for token in tokens:
-		yield token
-
-def decodeRegisterId(registerName):
-	try:
-		print("[DBG]Looking for register: " + registerName)
-		return RegisterToId[registerName]
-	except KeyError as e:
-		raise DecodeRegisterEx("Unknown register name: " + registerName) from None
-
-def handleInstruction(tokenizer):
-	result = []
-	mnemonic = next(tokenizer)
-	try:
-		opcode = MnemonicToOpcode[mnemonic][0]
-		result.append(opcode)
-		for argumentType in MnemonicToOpcode[mnemonic][1:]:
-			if argumentType == "I":
-				result.append(next(tokenizer))
-			elif argumentType == "R":
-				registerId = decodeRegisterId(next(tokenizer))
-				result.append(registerId)
-			else:
-				raise Exception("Internal compiler error. LUT wrong!")
-
-	except KeyError as e:
-		raise Exception("Unknown mnemocnic: " + mnemonic) from None
-	except StopIteration as e:
-		raise Exception("Not enough arguments for mnemonic: " + mnemonic) from None
-	except DecodeRegisterEx as e:
-		raise Exception(e) from None		
-
-	print("[DBG]Got mnemonic: {0}".format(mnemonic))
-	return result
-
-def compile(source):
-	binary = []
-	for lineIndex, line in enumerate(source.splitlines()):
-		print("[DBG]Line:" + str(lineIndex + 1))
-		tokenizer = tokenize(line)
+	@staticmethod
+	def __decodeRegisterId(registerName):
 		try:
-			result = handleInstruction(tokenizer)
-			binary.extend(result)
+			print("[DBG]Looking for register: " + registerName)
+			return RegisterToId[registerName]
+		except KeyError as e:
+			raise DecodeRegisterEx("Unknown register name: " + registerName) from None
+
+	@staticmethod
+	def __tokenize(source):
+		sourcePreprocessed = source.replace(',','')
+		tokens = sourcePreprocessed.split()
+		for token in tokens:
+			yield token
+
+	def __decodeLabelOrAddress(self, labelOrAddress):
+		try:
+			result = int(labelOrAddress)
+			return result
 		except Exception as e:
-			raise Exception("Compilation failed at line {0} due to error:\n\t{1}".format(lineIndex + 1, e)) from None
-	return binary
+			print("[DBG] Not and INT...")
+		try:
+			result = int(labelOrAddress, 16)
+			return result
+		except Exception as e:
+			print("[DBG] Not and HEX INT...")		
+		try:
+			address = self.labels[labelOrAddress];
+			return address
+		except KeyError as e:
+			print("[DBG] Label not found")
+			raise Exception("Couldn't decode " + labelOrAddress)
+
+	def __handleInstruction(self, tokenizer):
+		result = []
+		mnemonic = next(tokenizer)
+		if mnemonic[-1] == ":":
+			print("[DBG] Looks like I've got an label %s" % mnemonic)
+			self.labels[mnemonic.replace(":","")] = len(self.binary)
+		else:
+			try:
+				opcode = MnemonicToOpcode[mnemonic][0]
+				result.append(opcode)
+				for argumentType in MnemonicToOpcode[mnemonic][1:]:
+					if argumentType == "I":
+						result.append(next(tokenizer))
+					elif argumentType == "R":
+						registerId = self.__decodeRegisterId(next(tokenizer))
+						result.append(registerId)
+					elif argumentType == "A":
+						address = self.__decodeLabelOrAddress(next(tokenizer))
+						result.append(registerId)
+					else:
+						raise Exception("Internal compiler error. LUT wrong!")
+
+			except KeyError as e:
+				raise Exception("Unknown mnemocnic: " + mnemonic) from None
+			except StopIteration as e:
+				raise Exception("Not enough arguments for mnemonic: " + mnemonic) from None
+			except DecodeRegisterEx as e:
+				raise Exception(e) from None		
+
+		print("[DBG]Got mnemonic: {0}".format(mnemonic))
+		return result
+
+
+	def compile(self, source):
+		for lineIndex, line in enumerate(source.splitlines()):
+			print("[DBG]Line:" + str(lineIndex + 1))
+			tokenizer = self.__tokenize(line)
+			try:
+				result = self.__handleInstruction(tokenizer)
+				self.binary.extend(result)
+			except Exception as e:
+				raise Exception("Compilation failed at line {0} due to error:\n\t{1}".format(lineIndex + 1, e)) from None
+		self.__resolveForwardLabels()
+		return self.binary
+
+	def __resolveForwardLabels(self):
+		for idx, element in enumerate(self.binary):
+			try:
+				if type(element) is str and not element.isdigit():
+					self.binary[idx] = self.__decodeLabelOrAddress(element)
+			except Exception as e:
+				raise e
 
 def main():
-	sourceCode = ("MOV R1, R2\n"
-				  "HALT\n" 
+	sourceCode = ("start:\n"
+				  "MOV R1, R2\n"
+				  "SHL R1 \n"
+				  "JMP end\n" 
 				  "HALT\n"
-				  "HALT\n")
+				  "HALT\n"
+				  "end:\n")
 
 	print(sourceCode)
 	print("Compiling...")
 	try:
-		binary = compile(sourceCode)
+		compiler = Compiler()
+		binary = compiler.compile(sourceCode)
 		print("Binary below:")
 		print(binary)
+		print(compiler.labels)
+
 	except Exception as e:
 		print(e)
 
