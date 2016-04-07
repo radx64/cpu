@@ -64,30 +64,30 @@ Flag register holds information about current CPU state:
 
 ## Virtual machine block diagram
 ```
-							         ╒══════════════════╕
-							         │     Central      │
-							         │                  │
+                                     ╒══════════════════╕
+                                     │     Central      │
+                                     │                  │
 ╒══════════════════╕   Memory bus    │                  │    Memory bus    ╒══════════════════╕
 │Random Access Mem.│ <-------------> │    Processing    │  <-------------> │  Program memory  │
 ╘══════════════════╛                 │                  │                  ╘══════════════════╛
 ╒══════════════════╕ Interrupt line  │                  │
 │Progammable timer │ <-------------> │       Unit       │
 ╘══════════════════╛                 ╘══════════════════╛
-		 ^									  │
-		 |  	  Configuration port 		  │
-		 ╘----------------------------------->│
-						                     ╒═══╕
+         ^                                    │
+         |        Configuration port          │
+         ╘----------------------------------->│
+                                             ╒═══╕
 ╒══════════════════╕         Data Port       │ I │
 │     Terminal     │ <---------------------->│ / │
-╘══════════════════╛        Control Port	 │ O │
-          .									 │   │
-		  .									 │ B │
-		  . 								 │ U │
-	more devices							 │ S │
-		  .									 ╘═══╛   	
-		  .									   │
-		  .									   V
-											
+╘══════════════════╛        Control Port     │ O │
+          .                                  │   │
+          .                                  │ B │
+          .                                  │ U │
+    more devices                             │ S │
+          .                                  ╘═══╛      
+          .                                    │
+          .                                    V
+                                            
 ```
 ## Central Processing Unit Instruction Set Reference
 
