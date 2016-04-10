@@ -121,7 +121,7 @@ class Compiler:
                         result.append(registerId)
                     elif argumentType == "A":
                         address = self.__calculateRelativeJump(len(self.binary), self.__decodeLabelOrAddress(next(tokenizer)))
-                        result.append(registerId)
+                        result.append(address)
                     else:
                         raise Exception("Internal compiler error. LUT wrong!")
 

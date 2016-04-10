@@ -35,6 +35,7 @@ class CpuTests(unittest.TestCase):
 
     def test_IfItCalculateJumpsProperly(self):
         sourceCode = ("start:\n"
-            "JMP start\n")
+            "MOV R1, R2\n"
+            "JZ start\n")
         binary = self.compiler.compile(sourceCode)
-        self.assertEquals(binary, [0x40, 0xFF])      
+        self.assertEquals(binary, [0x00, 0x01, 0x02, 0x21, 0xFD])      
