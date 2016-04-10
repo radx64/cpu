@@ -38,4 +38,26 @@ class CpuTests(unittest.TestCase):
             "MOV R1, R2\n"
             "JZ start\n")
         binary = self.compiler.compile(sourceCode)
-        self.assertEquals(binary, [0x00, 0x01, 0x02, 0x21, 0xFD])      
+        self.assertEquals(binary, [0x00, 0x01, 0x02, 0x21, 0xFD]) 
+
+    def test_IfItThrowExceptionOnUnknownRegister(self):
+        sourceCode = "MOV RnotExisting\n"
+        self.assertRaises(Exception, self.compiler.compile, sourceCode)  
+
+    def test_IfItThrowExceptionOnUnknownLabel(self):
+        sourceCode = "JMP notExistingLabel\n"
+        self.assertRaises(Exception, self.compiler.compile, sourceCode)  
+
+    def test_IfDecodesOffsetsinINTformat(self):
+        sourceCode = ("JZ 0\n")
+        binary = self.compiler.compile(sourceCode)
+        self.assertEquals(binary, [0x21, 0x00]) 
+
+    def test_IfDecodesOffsetsinHEXformat(self):
+        sourceCode = ("JZ 0x00\n")
+        binary = self.compiler.compile(sourceCode)
+        self.assertEquals(binary, [0x21, 0x00]) 
+
+    def test_IfItThrowExceptionWhenNotSufficientCountOfArgumentsForMnemonic(self):
+        sourceCode = "MOV R0\n"
+        self.assertRaises(Exception, self.compiler.compile, sourceCode)  
