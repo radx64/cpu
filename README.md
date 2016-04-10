@@ -19,8 +19,8 @@ Coveralls status:
  - [ ] Interrupts
 
 * [X] Decompiler implementation
+* [X] Compiler implementation
 * [ ] Virtual machine implementation - ongoing
-* [ ] Compiler implementation
 * [ ] Example programs
 
 ## Virtual Machine design
