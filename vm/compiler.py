@@ -162,32 +162,3 @@ class Compiler:
                     self.binary[idx] = self.__calculateRelativeJump(idx, self.__decodeLabelOrAddress(element))
             except Exception as e:
                 raise e
-
-def main():
-    sourceCode = ("start:\n"
-                  "MOV R1, R2\n"
-                  "SHL R1 \n"
-                  "JMP start\n" 
-                  "HALT\n"
-                  "HALT\n"
-                  "end:\n")
-
-    print(sourceCode)
-    print("Compiling...")
-    try:
-        compiler = Compiler()
-        binary = compiler.compile(sourceCode)
-        print("Binary below:")
-        print(binary)
-        print("Found labels:")
-        print(compiler.labels)
-
-    except Exception as e:
-        print(e)
-
-if __name__ == '__main__':
-    main()
-
-
-
-
