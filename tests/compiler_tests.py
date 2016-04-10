@@ -19,7 +19,6 @@ class CpuTests(unittest.TestCase):
     def test_IfItHandleLabels(self):
         sourceCode = ("start:\n"
             "MOV R0, R1\n")
-
         binary = self.compiler.compile(sourceCode)
         self.assertIn('start', self.compiler.labels)      
 
@@ -27,6 +26,15 @@ class CpuTests(unittest.TestCase):
         sourceCode = ("start:\n"
             "JMP end\n"
             "end:\n")
-
         binary = self.compiler.compile(sourceCode)
         self.assertEquals(binary, [0x40, 0x01])
+
+    def test_IfItThrowExceptionOnError(self):
+        sourceCode = "some error in source\n"
+        self.assertRaises(Exception, self.compiler.compile, sourceCode)
+
+    def test_IfItCalculateJumpsProperly(self):
+        sourceCode = ("start:\n"
+            "JMP start\n")
+        binary = self.compiler.compile(sourceCode)
+        self.assertEquals(binary, [0x40, 0xFF])      
