@@ -147,10 +147,14 @@ class Compiler:
                 raise Exception(e) from None        
         return result
 
+    @staticmethod
+    def __removeComments(line):
+        return line.rsplit('#')[0]
 
     def compile(self, source):
         self.binary = []
         for lineIndex, line in enumerate(source.splitlines()):
+            line = self.__removeComments(line)
             tokenizer = self.__tokenize(line)
             try:
                 result = self.__handleInstruction(tokenizer)

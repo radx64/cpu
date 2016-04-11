@@ -70,3 +70,8 @@ class CpuTests(unittest.TestCase):
     def test_IfItThrowExceptionWhenNotSufficientCountOfArgumentsForMnemonic(self):
         sourceCode = "MOV R0\n"
         self.assertRaises(Exception, self.compiler.compile, sourceCode)  
+
+    def test_IfCouldSkipTheComments(self):
+        sourceCode = "MOV R0, R1  ; this moves something somewhere"
+        binary = self.compiler.compile(sourceCode)
+        self.assertEquals(binary, [0x00, 0x00, 0x01])
