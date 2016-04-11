@@ -30,7 +30,7 @@ opcodeToMnemonic = {
     0x41 : ("JMPR", "R"),
     0x42 : ("CALL", "I"), 
     0x43 : ("CALR", "R"),
-    0x44 : ("RET",  "I"), 
+    0x44 : ("RET",  ), 
     0x50 : ("IN",   "I", "R"),
     0x51 : ("OUT",  "I", "R"),
     0xFF : ("HALT", )

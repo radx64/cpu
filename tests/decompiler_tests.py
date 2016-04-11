@@ -31,10 +31,10 @@ class DecomplierTests(unittest.TestCase):
         self.assertEqual(result, "NOT R1")
 
     def test_IfItsPuttingConstantsHexadecimaly(self):
-        self.decompiler.load([0x44, 0xFA])
+        self.decompiler.load([0x42, 0xFA])
         self.decompiler.run()
         result = self.decompiler.getDecompiled()
-        self.assertEqual(result, "RET 0xFA")
+        self.assertEqual(result, "CALL 0xFA")
 
     def test_IfItCanHandleInstructionWithoutOperands(self):
         self.decompiler.load([0xFF])

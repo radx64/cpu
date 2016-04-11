@@ -53,7 +53,7 @@ MnemonicToOpcode = {
     "JMPR" : (0x41, "R"),
     "CALL" : (0x42, "I"), 
     "CALR" : (0x43, "R"),
-    "RET"  : (0x44, "I"), 
+    "RET"  : (0x44, ), 
     "IN"   : (0x50, "I", "R"),
     "OUT"  : (0x51, "I", "R"),
     "HALT" : (0xFF, )
@@ -111,6 +111,8 @@ class Compiler:
             try:
                 opcode = MnemonicToOpcode[mnemonic][0]
                 result.append(opcode)
+                if (MnemonicToOpcode[mnemonic]) == 1:
+                    return result
                 for argumentType in MnemonicToOpcode[mnemonic][1:]:
                     if argumentType == "I":
                         result.append(next(tokenizer))
