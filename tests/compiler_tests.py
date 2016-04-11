@@ -75,3 +75,12 @@ class CpuTests(unittest.TestCase):
         sourceCode = "MOV R0, R1  ; this moves something somewhere"
         binary = self.compiler.compile(sourceCode)
         self.assertEquals(binary, [0x00, 0x00, 0x01])
+
+    def test_IfCouldHandleNoArgumentOpcodes(self):
+        sourceCode = "RET"
+        binary = self.compiler.compile(sourceCode)
+        self.assertEquals(binary, [0x44])
+
+    def test_IfItThrowsExceptionWhenImmValueCantBeDecoded(self):
+        sourceCode = ("SET R1, trolololo\n")
+        self.assertRaises(Exception, self.compiler.compile, sourceCode)  
