@@ -120,7 +120,8 @@ class Compiler:
                         registerId = self.__decodeRegisterId(next(tokenizer))
                         result.append(registerId)
                     elif argumentType == "A":
-                        address = self.__calculateRelativeJump(len(self.binary), self.__decodeLabelOrAddress(next(tokenizer)))
+                        address = self.__calculateRelativeJump(len(self.binary), 
+                            self.__decodeLabelOrAddress(next(tokenizer)))
                         result.append(address)
                     else:
                         raise Exception("Internal compiler error. LUT wrong!")
@@ -141,7 +142,8 @@ class Compiler:
                 result = self.__handleInstruction(tokenizer)
                 self.binary.extend(result)
             except Exception as e:
-                raise Exception("Compilation failed at line {0} due to error:\n\t{1}".format(lineIndex + 1, e)) from None
+                raise Exception("Compilation failed at line {0} due to error:\n\t{1}"
+                    .format(lineIndex + 1, e)) from None
         self.__resolveForwardLabels()
         return self.binary
 
@@ -158,6 +160,7 @@ class Compiler:
         for idx, element in enumerate(self.binary):
             try:
                 if type(element) is str and not element.isdigit():
-                    self.binary[idx] = self.__calculateRelativeJump(idx, self.__decodeLabelOrAddress(element, True))
+                    self.binary[idx] = self.__calculateRelativeJump(idx, 
+                        self.__decodeLabelOrAddress(element, True))
             except Exception as e:
                 raise e
