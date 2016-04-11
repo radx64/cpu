@@ -124,7 +124,7 @@ class Compiler:
             try:
                 opcode = MnemonicToOpcode[mnemonic][0]
                 result.append(opcode)
-                if (MnemonicToOpcode[mnemonic]) == 1:
+                if len(MnemonicToOpcode[mnemonic]) == 1:
                     return result
                 for argumentType in MnemonicToOpcode[mnemonic][1:]:
                     if argumentType == "I":
