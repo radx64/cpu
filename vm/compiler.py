@@ -24,7 +24,6 @@ RegisterToId = {
 # R - register name after instruction
 # I - constant value (immv)
 # A - relative address
-
 MnemonicToOpcode = {
     "MOV"  : (0x00, "R", "R"),
     "SET"  : (0x01, "R", "I"),
@@ -50,7 +49,7 @@ MnemonicToOpcode = {
     "JA"   : (0x26, "A"),
     "PUSH" : (0x30, "R"), 
     "POP"  : (0x31, "R"),
-    "JMP"  : (0x40, "I"), 
+    "JMP"  : (0x40, "A"), 
     "JMPR" : (0x41, "R"),
     "CALL" : (0x42, "I"), 
     "CALR" : (0x43, "R"),
@@ -84,7 +83,7 @@ class Compiler:
         for token in tokens:
             yield token
 
-    def __decodeLabelOrAddress(self, labelOrAddress):
+    def __decodeLabelOrAddress(self, labelOrAddress, isSecondPass = False):
         try:
             result = int(labelOrAddress)
             return result
@@ -94,12 +93,14 @@ class Compiler:
             result = int(labelOrAddress, 16)
             return result
         except Exception as e:
-        	pass  
+            pass  
         try:
             address = self.labels[labelOrAddress];
             return address
         except KeyError as e:
-            raise Exception("Couldn't decode " + labelOrAddress)
+            if isSecondPass:
+                raise Exception("Unknown label: " + labelOrAddress)
+            return labelOrAddress #this is left for second compiler pass
 
     def __handleInstruction(self, tokenizer):
         result = []
@@ -144,6 +145,8 @@ class Compiler:
 
     @staticmethod
     def __calculateRelativeJump(current, desired):
+        if isinstance(desired, str):
+            return desired
         if desired < current:
             return WORD_SIZE - (desired + current)
         else:
@@ -153,6 +156,6 @@ class Compiler:
         for idx, element in enumerate(self.binary):
             try:
                 if type(element) is str and not element.isdigit():
-                    self.binary[idx] = self.__calculateRelativeJump(idx, self.__decodeLabelOrAddress(element))
+                    self.binary[idx] = self.__calculateRelativeJump(idx, self.__decodeLabelOrAddress(element, True))
             except Exception as e:
                 raise e
