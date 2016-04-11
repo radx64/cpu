@@ -73,7 +73,6 @@ class Compiler:
     @staticmethod
     def __decodeRegisterId(registerName):
         try:
-            print("[DBG]Looking for register: " + registerName)
             return RegisterToId[registerName]
         except KeyError as e:
             raise DecodeRegisterEx("Unknown register name: " + registerName) from None
@@ -90,24 +89,22 @@ class Compiler:
             result = int(labelOrAddress)
             return result
         except Exception as e:
-            print("[DBG] Not and INT...")
+            pass
         try:
             result = int(labelOrAddress, 16)
             return result
         except Exception as e:
-            print("[DBG] Not and HEX INT...")       
+        	pass  
         try:
             address = self.labels[labelOrAddress];
             return address
         except KeyError as e:
-            print("[DBG] Label not found")
             raise Exception("Couldn't decode " + labelOrAddress)
 
     def __handleInstruction(self, tokenizer):
         result = []
         mnemonic = next(tokenizer)
         if mnemonic[-1] == ":":
-            print("[DBG] Looks like I've got an label %s" % mnemonic)
             self.labels[mnemonic.replace(":","")] = len(self.binary)
         else:
             try:
@@ -131,14 +128,11 @@ class Compiler:
                 raise Exception("Not enough arguments for mnemonic: " + mnemonic) from None
             except DecodeRegisterEx as e:
                 raise Exception(e) from None        
-
-        print("[DBG]Got mnemonic: {0}".format(mnemonic))
         return result
 
 
     def compile(self, source):
         for lineIndex, line in enumerate(source.splitlines()):
-            print("[DBG]Line:" + str(lineIndex + 1))
             tokenizer = self.__tokenize(line)
             try:
                 result = self.__handleInstruction(tokenizer)
