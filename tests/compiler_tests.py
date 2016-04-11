@@ -40,6 +40,15 @@ class CpuTests(unittest.TestCase):
         binary = self.compiler.compile(sourceCode)
         self.assertEquals(binary, [0x00, 0x01, 0x02, 0x21, 0xFD]) 
 
+    def test_IfItCompilerImmValuesProperly(self):
+        sourceCode = ("SET R1, 0x12\n")
+        binary = self.compiler.compile(sourceCode)
+        self.assertEquals(binary, [0x01, 0x01, 0x12])
+
+        sourceCode = ("SET R1, 12\n")
+        binary = self.compiler.compile(sourceCode)
+        self.assertEquals(binary, [0x01, 0x01, 0xC])
+
     def test_IfItThrowExceptionOnUnknownRegister(self):
         sourceCode = "MOV RnotExisting\n"
         self.assertRaises(Exception, self.compiler.compile, sourceCode)  

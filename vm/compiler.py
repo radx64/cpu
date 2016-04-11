@@ -102,6 +102,19 @@ class Compiler:
                 raise Exception("Unknown label: " + labelOrAddress)
             return labelOrAddress #this is left for second compiler pass
 
+    def __decodeImmValue(self, value):
+        try:
+            result = int(value)
+            return result
+        except Exception as e:
+            pass
+        try:
+            result = int(value, 16)
+            return result
+        except Exception as e:
+            pass
+        raise Exception("Couldn't decode immediate value of: " + value)
+
     def __handleInstruction(self, tokenizer):
         result = []
         mnemonic = next(tokenizer)
@@ -115,7 +128,7 @@ class Compiler:
                     return result
                 for argumentType in MnemonicToOpcode[mnemonic][1:]:
                     if argumentType == "I":
-                        result.append(next(tokenizer))
+                        result.append(self.__decodeImmValue(next(tokenizer)))
                     elif argumentType == "R":
                         registerId = self.__decodeRegisterId(next(tokenizer))
                         result.append(registerId)
@@ -136,6 +149,7 @@ class Compiler:
 
 
     def compile(self, source):
+        self.binary = []
         for lineIndex, line in enumerate(source.splitlines()):
             tokenizer = self.__tokenize(line)
             try:
