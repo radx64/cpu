@@ -248,24 +248,24 @@ Flag register holds information about current CPU state:
 ╒═══════════════════════╤═══════════╕
 │ Device port           │ Address   │
 ╞═══════════════════════╪═══════════╡
-│ PIT control           │ 0x00      │
+│ Terminal control      │ 0x00      │ 
 ├───────────────────────┼───────────┤
 │ Terminal data in      │ 0x01      │ 
 ├───────────────────────┼───────────┤ 
 │ Terminal data out     │ 0x02      │
 ├───────────────────────┼───────────┤
-│ Terminal control      │ 0x03      │ 
+│ PIT control           │ 0x03      │
 ╘═══════════════════════╧═══════════╛ 
 ```
 
 ## Terminal device usage
 
-Terminal device is connected via I/O bus on addresses 0x01 - 0x03.
+Terminal device is connected via I/O bus on addresses 0x00 - 0x02.
 
 ### Flags
 Terminal control port:
-DATA_READY - bit 0.
-Bit 1-7 are unused for now.
+* bit 0 - DATA_READY
+* bits 1-7 are unused for now.
 
 ### Writing to terminal
 
@@ -273,10 +273,13 @@ To write character on terminal CPU need to send ASCII character byte to data out
 
 ### Reading from terminal
 
-Reading character operation should be done in two steps. First terminal control port(0x03) should 
+Reading character operation should be done in two steps. First terminal control port(0x00) should 
 be read to check if there is any character in buffer available. If flag DATA_READY (bit 0) is set 
-data byte could be read from terminal data in port(0x02). Otherwise any reading from terminal data
+data byte could be read from terminal data in port(0x01). Otherwise any reading from terminal data
 in port can lead to undefined behavour.
+
+### Interrupts from terminal
+[[To be specified]]
 
 ## Running tests
 
