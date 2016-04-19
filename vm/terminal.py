@@ -1,21 +1,4 @@
-
-class Port:
-	def __init__(self, readHandle, writeHandle):
-		self.readHandle = readHandle
-		self.writeHandle = writeHandle
-
-	def read(self):
-		if hasattr(self.readHandle, '__call__'):
-			return self.readHandle()
-		else:
-			raise Exception("Not a callable")
-		return 0
-
-	def write(self, value):
-		if hasattr(self.writeHandle , '__call__'):
-			self.writeHandle(value)
-		else:
-			raise Exception("Not a callable")
+from port import Port
 
 class Terminal:
 	def __init__(self):
@@ -33,7 +16,7 @@ class Terminal:
 		pass
 
 	def _dataInPortRead(self):
-		return input("CPU asked for data:")
+		return input("CPU asked for data: ")
 
 	def _dataOutPortWrite(self, value):
 		print (str(value))
