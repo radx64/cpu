@@ -25,3 +25,8 @@ class TerminalTests(unittest.TestCase):
         self.terminal._getInput = Mock(return_value="SOME_TEXT")
         char = self.terminal.dataInPort.read()
         self.assertEqual(char + self.terminal.readbuffer, 'SOME_TEXT')
+
+    def test_IfItReturnCorrectControlByte(self):
+        self.terminal._getInput = Mock(return_value="SOME_TEXT")
+        char = self.terminal.dataInPort.read()
+        self.assertEqual(self.terminal.controlPort.read(), 0x1)

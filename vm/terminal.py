@@ -15,10 +15,10 @@ class Terminal:
         else:
             return 0x1
 
-    def _controlPortWrite(self, value):
+    def _controlPortWrite(self, value):  # pragma: no cover
         pass
 
-    def _getInput():
+    def _getInput(): # pragma: no cover
         return input("INPUT>> ")
 
     def _dataInPortRead(self):
