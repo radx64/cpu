@@ -10,22 +10,35 @@ class Terminal:
 		self.dataOutPort = Port(None, self._dataOutPortWrite)
 
 	def _controlPortRead(self):
-		return None
+		if len(self.readbuffer) == 0:
+			return 0x0
+		else:
+			return 0x1
 
 	def _controlPortWrite(self, value):
 		pass
 
 	def _dataInPortRead(self):
-		return input("CPU asked for data: ")
+		while len(self.readbuffer) == 0:
+			self.readbuffer = input("INPUT>> ")
+		
+		nextCharacter = self.readbuffer[0]
+		self.readbuffer = self.readbuffer[1:]
+		return nextCharacter
 
 	def _dataOutPortWrite(self, value):
-		print (str(value))
+		if value == 0xA:
+			print(self.writebuffer)
+			self.writebuffer = ''
+		else:
+			self.writebuffer += value
 
 if __name__ == '__main__':
 	terminal = Terminal()
 	terminal.dataOutPort.write("A")
 	terminal.dataOutPort.write("B")
 	terminal.dataOutPort.write("C")
+	terminal.dataOutPort.write("\n")
 	print("Got from terminal " + terminal.dataInPort.read())
-
-
+	while terminal.controlPort.read() == 0x1:
+		print("Got from terminal " + terminal.dataInPort.read())

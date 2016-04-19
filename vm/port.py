@@ -4,7 +4,6 @@ class Port:
         self.writeHandle = writeHandle
         if not hasattr(self.readHandle, '__call__') and not readHandle == None:
             raise Exception("Read handle is not callable!")
-
         if not hasattr(self.writeHandle, '__call__') and not writeHandle == None:
             raise Exception("Write handle is not callable!")
 
