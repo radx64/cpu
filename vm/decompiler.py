@@ -109,7 +109,7 @@ class Decompiler:
                 elif operand == "I":
                     self._decodeConstant(index+operIndex)
                 else:
-                    raise Exception("Error! Unknown operand type in mnemonic Look Up Table")
+                    raise Exception("Error! Unknown operand type in mnemonic Look Up Table") # pragma: no cover
                 if (operIndex < operandsCount-1):
                     self._appendToEndOfASource(", ")
             self._appendNewLineToSource()

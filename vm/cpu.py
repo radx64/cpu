@@ -351,10 +351,10 @@ class Cpu:
         self.registers["PC"] = functionPointer
 
     def __IN(self):
-        raise Exception("Instruction not implemented yet!")
+        raise Exception("Instruction not implemented yet!") # pragma: no cover
 
     def __OUT(self):
-        raise Exception("Instruction not implemented yet!")
+        raise Exception("Instruction not implemented yet!") # pragma: no cover
 
     def __HALT(self):
         self.running = False

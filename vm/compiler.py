@@ -137,7 +137,7 @@ class Compiler:
                             self.__decodeLabelOrAddress(next(tokenizer)))
                         result.append(address)
                     else:
-                        raise Exception("Internal compiler error. LUT wrong!")
+                        raise Exception("Internal compiler error. LUT wrong!") # pragma: no cover
 
             except KeyError as e:
                 raise Exception("Unknown mnemocnic: " + mnemonic) from None
