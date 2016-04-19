@@ -1,4 +1,4 @@
-from port import Port
+from vm.port import Port
 
 class Terminal:
     def __init__(self):
@@ -18,9 +18,12 @@ class Terminal:
     def _controlPortWrite(self, value):
         pass
 
+    def _getInput():
+        return input("INPUT>> ")
+
     def _dataInPortRead(self):
         while len(self.readbuffer) == 0:
-            self.readbuffer = input("INPUT>> ")
+            self.readbuffer = self._getInput()
         
         nextCharacter = self.readbuffer[0]
         self.readbuffer = self.readbuffer[1:]
@@ -32,13 +35,3 @@ class Terminal:
             self.writebuffer = ''
         else:
             self.writebuffer += value
-
-if __name__ == '__main__':
-    terminal = Terminal()
-    terminal.dataOutPort.write("A")
-    terminal.dataOutPort.write("B")
-    terminal.dataOutPort.write("C")
-    terminal.dataOutPort.write("\n")
-    print("Got from terminal " + terminal.dataInPort.read())
-    while terminal.controlPort.read() == 0x1:
-        print("Got from terminal " + terminal.dataInPort.read())
