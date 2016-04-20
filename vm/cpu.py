@@ -86,6 +86,15 @@ class Cpu:
         self.terminal = terminal
         self._initRegisters()
         self.opcodeToHandlerMapping = self._getOpcodeToHandlerMapping()
+        self.io_devices = self.__initDevices()
+
+    def __initDevices(self):
+        devices = {
+        0x00 : self.terminal.controlPort,
+        0x01 : self.terminal.dataInPort,
+        0x02 : self.terminal.dataOutPort
+        }
+        return devices
 
     def __fetchNextByteFromRom(self):
         byte = self.rom[self.registers["PC"]]
@@ -130,6 +139,21 @@ class Cpu:
 
     def __isCarryFlagSet(self):
         return bool(self.registers["FR"] & self.CARRY_FLAG)
+
+    def __readByteFromPort(self, address):
+        try:
+            port = self.io_devices[address]
+            return port.read()
+        except KeyError:
+            raise Exception("Port with address 0x{0:02X} not found".format(address))
+
+    def __writeByteToPort(self, address, value):
+        try:
+            port = self.io_devices[address]
+            return port.write(value)
+        except KeyError:
+            raise Exception("Port with address 0x{0:02X} not found".format(address))
+
 
     def __MOV(self):
         destinationRegisterId = self.__fetchNextByteFromRom()
@@ -351,10 +375,16 @@ class Cpu:
         self.registers["PC"] = functionPointer
 
     def __IN(self):
-        raise Exception("Instruction not implemented yet!") # pragma: no cover
+        portAddress = self.__fetchNextByteFromRom()
+        value = self.__readByteFromPort(portAddress)
+        destinationRegisterId = self.__fetchNextByteFromRom()
+        self.__setRegisterValueById(destinationRegisterId, value)
 
     def __OUT(self):
-        raise Exception("Instruction not implemented yet!") # pragma: no cover
+        portAddress = self.__fetchNextByteFromRom()
+        sourceRegisterId = self.__fetchNextByteFromRom()
+        value = self.__getRegisterValueById(sourceRegisterId)
+        self.__writeByteToPort(portAddress, value)
 
     def __HALT(self):
         self.running = False

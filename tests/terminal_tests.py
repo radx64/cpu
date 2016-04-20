@@ -3,7 +3,6 @@ import sys
 from io import StringIO
 from vm.terminal import Terminal
 from unittest.mock import Mock
-from unittest.mock import patch
 
 class TerminalTests(unittest.TestCase):
     def __init__(self, parameters):

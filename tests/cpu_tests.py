@@ -1,11 +1,20 @@
 import unittest
 from vm.cpu import Cpu
+from vm.port import Port
+from unittest.mock import Mock
+
+class TerminalFake:
+    def __init__(self):
+        self.controlPort = Port(None, None)
+        self.dataInPort  = Port(None, None)
+        self.dataOutPort = Port(None, None)
 
 class CpuTests(unittest.TestCase):
     def __init__(self, parameters):
         unittest.TestCase.__init__(self, parameters)
         self.ram = [0x00] * 256;    # so much blocks of memory :)
-        self.cpu = Cpu(self.ram, None) # (RAM, TERMINAL NotYetImpl
+        self.terminal = TerminalFake()
+        self.cpu = Cpu(self.ram, self.terminal)
 
     def test_IfCpuGeneralRegistersHaveCorrectValuesAtFirstBoot(self):
         self.assertEquals(self.cpu.registers["R0"], 0x00)
@@ -327,3 +336,24 @@ class CpuTests(unittest.TestCase):
         self.cpu.ram[0xFE] = 0x02
         self.cpu.run(programm)
         self.assertEquals(self.cpu.registers["PC"], 0x03)
+
+    def test_IN_instructionHandling(self):
+        programm = [0x50, 0x01, 0x00, 0xFF]
+        self.cpu.terminal.dataInPort.read = Mock(return_value=0x12)
+        self.cpu.run(programm)
+        self.assertEquals(self.cpu.registers["R0"], 0x12)
+
+    def test_IN_instructionHandlingRaisesWhenNoDeviceAvailable(self):
+        programm = [0x50, 0x99, 0x00, 0xFF]
+        self.assertRaises(Exception, self.cpu.run, programm)
+
+    def test_OUT_instructionHandling(self):
+        programm = [0x51, 0x02, 0x00, 0xFF]
+        self.cpu.registers["R0"] = 0x12
+        self.cpu.terminal.dataOutPort.write = Mock()
+        self.cpu.run(programm)
+        self.cpu.terminal.dataOutPort.write.assert_called_with(0x12)
+
+    def test_OUT_instructionHandlingRaisesWhenNoDeviceAvailable(self):
+        programm = [0x51, 0x99, 0x00, 0xFF]
+        self.assertRaises(Exception, self.cpu.run, programm)
