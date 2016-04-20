@@ -122,3 +122,40 @@ class Decompiler:
         opcode = self.binary[index]
         newIndex = index + self._decodeOperands(opcode, index)
         return newIndex;
+
+import sys
+import array
+def help():  # pragma: no cover
+    helpText = ("Usage: decompiler.py source.bin output.asm\n"
+                "\t source.bin - program filename \n"
+                "\t output.asm - decompiled source code\n")
+    print(helpText)
+
+def readSource():  # pragma: no cover
+    try:
+        source = open(sys.argv[1], 'rb')
+        return array.array('B', source.read()).tostring()
+    except FileNotFoundError as e:
+        raise Exception ("Source file " + sys.argv[1] + " not found")
+
+def writeOutput(sourceCode):  # pragma: no cover
+    try:
+        output = open(sys.argv[2], 'w')
+        output.write(sourceCode)
+    except FileNotFoundError as e:
+        raise Exception ("Couldn't create " + sys.argv[1] + " file") 
+
+def main():  # pragma: no cover
+    if len(sys.argv) != 3:
+        help()
+        return
+    decompiler = Decompiler()
+    decompiler.load(readSource())
+    decompiler.run()
+    writeOutput(decompiler.getDecompiled())
+
+if __name__ == '__main__':  # pragma: no cover
+    try:
+        main()
+    except Exception as e:
+        print(e)
