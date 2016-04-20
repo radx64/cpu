@@ -149,12 +149,14 @@ class Compiler:
 
     @staticmethod
     def __removeComments(line):
-        return line.rsplit('#')[0]
+        return line.rsplit(';')[0]
 
     def compile(self, source):
         self.binary = []
         for lineIndex, line in enumerate(source.splitlines()):
             line = self.__removeComments(line)
+            if len(line) == 0:
+                continue
             tokenizer = self.__tokenize(line)
             try:
                 result = self.__handleInstruction(tokenizer)
@@ -182,3 +184,40 @@ class Compiler:
                         self.__decodeLabelOrAddress(element, True))
             except Exception as e:
                 raise e
+
+import sys
+import array
+def help():  # pragma: no cover
+    helpText = ("Usage: compiler.py source.asm output.bin\n"
+                "\t source.asm - filename with source code\n"
+                "\t output.bin - compiled program filename\n")
+    print(helpText)
+
+def readSource():  # pragma: no cover
+    try:
+        source = open(sys.argv[1], 'r')
+        return source.read()
+    except FileNotFoundError as e:
+        raise Exception ("Source file " + sys.argv[1] + " not found")
+
+def writeOutput(data):  # pragma: no cover
+    try:
+        output = open(sys.argv[2], 'wb')
+        output.write(array.array('B', data))
+    except FileNotFoundError as e:
+        raise Exception ("Couldn't create " + sys.argv[1] + " file") 
+
+
+def main():  # pragma: no cover
+    if len(sys.argv) != 3:
+        help()
+        return
+    compiler = Compiler()
+    binary = compiler.compile(readSource())
+    writeOutput(binary)
+
+if __name__ == '__main__':  # pragma: no cover
+    try:
+        main()
+    except Exception as e:
+        print(e)

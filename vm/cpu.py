@@ -389,9 +389,10 @@ class Cpu:
     def __HALT(self):
         self.running = False
 
-    def run(self, programm):
+    def run(self, program):
         self.registers["PC"] = 0x00
-        self.rom = programm
+        self.rom = program
+        self.rom = self.rom + [0xFF]*(0xFF - len(self.rom))
         self.running = True
         while self.running: 
             instruction = self.__fetchNextByteFromRom()
