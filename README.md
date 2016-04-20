@@ -275,8 +275,8 @@ To write character on terminal CPU need to send ASCII character byte to data out
 
 Reading character operation should be done in two steps. First terminal control port(0x00) should 
 be read to check if there is any character in buffer available. If flag DATA_READY (bit 0) is set, 
-byte of data could be read from terminal data in port(0x01). Otherwise reading any data from terminal 
-in port can lead to undefined behavour.
+byte of data could be read from terminal data in port(0x01). Otherwise reading operation will be blocking,
+causing processor to stop unitl new data is ready. 
 
 ### Interrupts from terminal
 [[To be specified]]
