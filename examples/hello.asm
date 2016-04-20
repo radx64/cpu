@@ -1,4 +1,4 @@
-; Simple programm that prints only HELLO in terminal 
+; Simple program that prints only HELLO in terminal 
 SET R0, 72
 OUT 0x02, R0 ; H
 
