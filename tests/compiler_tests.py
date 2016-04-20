@@ -76,6 +76,11 @@ class CpuTests(unittest.TestCase):
         binary = self.compiler.compile(sourceCode)
         self.assertEquals(binary, [0x00, 0x00, 0x01])
 
+    def test_IfCouldSkipTheCommentsOnBeginingOfLine(self):
+        sourceCode = ";this moves something somewhere\n MOV R0, R1"
+        binary = self.compiler.compile(sourceCode)
+        self.assertEquals(binary, [0x00, 0x00, 0x01])
+
     def test_IfCouldHandleNoArgumentOpcodes(self):
         sourceCode = "RET"
         binary = self.compiler.compile(sourceCode)
