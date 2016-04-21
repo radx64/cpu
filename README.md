@@ -1,3 +1,6 @@
+<p align="center">
+  <img src="https://github.com/radx64/vm/blob/master/logo.png?raw=true" alt="Logo image"/>
+</p>
 # Small and simple, pure Virtual Machine.
 
 ## Rationale
