@@ -13,10 +13,10 @@ class TerminalTests(unittest.TestCase):
         normalStdOut = sys.stdout
         out = StringIO()
         sys.stdout = out
-        self.terminal.dataOutPort.write("A")
-        self.terminal.dataOutPort.write("B")
-        self.terminal.dataOutPort.write("C")
-        self.terminal.dataOutPort.write("\n")
+        self.terminal.dataOutPort.write(65)
+        self.terminal.dataOutPort.write(66)
+        self.terminal.dataOutPort.write(67)
+        self.terminal.dataOutPort.write(10)
         self.assertEqual(out.getvalue().strip(), "ABC")
         sys.stdout = normalStdOut
 

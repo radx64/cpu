@@ -1,5 +1,5 @@
 import unittest
-from vm.compiler import Compiler
+from compiler import Compiler
 
 class CpuTests(unittest.TestCase):
     def __init__(self, parameters):

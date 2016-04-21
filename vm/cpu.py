@@ -102,11 +102,11 @@ class Cpu:
         return byte
 
     def __setRegisterValueById(self, id, value):
-        print ("[DEBUG] Setting register {0}, with {1}".format(id,value))
+        #print ("[DEBUG] Setting register {0}, with {1}".format(id,value))
         self.registers[self.__registerIdToName(id)] = value
 
     def __getRegisterValueById(self, id):
-        print ("[DEBUG] Fetching register {0}".format(id))
+        #print ("[DEBUG] Fetching register {0}".format(id))
         return self.registers[self.__registerIdToName(id)]
 
     def __validateAddress(self, address):
@@ -396,7 +396,7 @@ class Cpu:
         self.running = True
         while self.running: 
             instruction = self.__fetchNextByteFromRom()
-            print ("[DEBUG] Executing instruction: 0x{0:02X}".format(instruction))
+            #print ("[DEBUG] Executing instruction: 0x{0:02X}".format(instruction))
             try:
                 self.opcodeToHandlerMapping[instruction]() 
             except Exception as e: 

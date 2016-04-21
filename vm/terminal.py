@@ -30,8 +30,8 @@ class Terminal:
         return nextCharacter
 
     def _dataOutPortWrite(self, value):
-        if value == "\n":
+        if value == 10:
             print(self.writebuffer)
             self.writebuffer = ''
         else:
-            self.writebuffer += value
+            self.writebuffer += chr(value)

@@ -1,5 +1,5 @@
 import unittest
-from vm.decompiler import Decompiler
+from decompiler import Decompiler
 
 class DecomplierTests(unittest.TestCase):
     def __init__(self, parameters):
