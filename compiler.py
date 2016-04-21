@@ -51,7 +51,7 @@ MnemonicToOpcode = {
     "POP"  : (0x31, "R"),
     "JMP"  : (0x40, "A"), 
     "JMPR" : (0x41, "R"),
-    "CALL" : (0x42, "I"), 
+    "CALL" : (0x42, "A"), 
     "CALR" : (0x43, "R"),
     "RET"  : (0x44, ), 
     "IN"   : (0x50, "I", "R"),
@@ -172,9 +172,9 @@ class Compiler:
         if isinstance(desired, str):
             return desired
         if desired < current:
-            return WORD_SIZE - (desired + current)
+            return WORD_SIZE - (desired + current - 2)
         else:
-            return desired - current
+            return (desired - current - 1) % WORD_SIZE
 
     def __resolveForwardLabels(self):
         for idx, element in enumerate(self.binary):
@@ -215,6 +215,7 @@ def main():  # pragma: no cover
     compiler = Compiler()
     binary = compiler.compile(readSource())
     writeOutput(binary)
+    print("Size of binary: " + str(len(binary)) + " bytes")
 
 if __name__ == '__main__':  # pragma: no cover
     try:

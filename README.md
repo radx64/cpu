@@ -18,13 +18,13 @@ Coveralls status:
  - [X] Memory handling
  - [X] Jumps
  - [X] Function calls
- - [ ] In/Out ports
+ - [X] In/Out ports
  - [ ] Interrupts
 
 * [X] Decompiler implementation
 * [X] Compiler implementation
 * [ ] Virtual machine implementation - ongoing
-* [ ] Example programs
+* [ ] Example programs - ongoing
 
 ## Virtual Machine design
 ```

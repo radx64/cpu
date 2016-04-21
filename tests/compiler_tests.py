@@ -27,7 +27,7 @@ class CpuTests(unittest.TestCase):
             "JMP end\n"
             "end:\n")
         binary = self.compiler.compile(sourceCode)
-        self.assertEquals(binary, [0x40, 0x01])
+        self.assertEquals(binary, [0x40, 0x00])
 
     def test_IfItThrowExceptionOnError(self):
         sourceCode = "some error in source\n"
@@ -38,7 +38,7 @@ class CpuTests(unittest.TestCase):
             "MOV R1, R2\n"
             "JZ start\n")
         binary = self.compiler.compile(sourceCode)
-        self.assertEquals(binary, [0x00, 0x01, 0x02, 0x21, 0xFD]) 
+        self.assertEquals(binary, [0x00, 0x01, 0x02, 0x21, 0xFF]) 
 
     def test_IfItCompilerImmValuesProperly(self):
         sourceCode = ("SET R1, 0x12\n")
@@ -60,12 +60,12 @@ class CpuTests(unittest.TestCase):
     def test_IfDecodesOffsetsinINTformat(self):
         sourceCode = ("JZ 0\n")
         binary = self.compiler.compile(sourceCode)
-        self.assertEquals(binary, [0x21, 0x00]) 
+        self.assertEquals(binary, [0x21, 0xFF]) 
 
     def test_IfDecodesOffsetsinHEXformat(self):
         sourceCode = ("JZ 0x00\n")
         binary = self.compiler.compile(sourceCode)
-        self.assertEquals(binary, [0x21, 0x00]) 
+        self.assertEquals(binary, [0x21, 0xFF]) 
 
     def test_IfItThrowExceptionWhenNotSufficientCountOfArgumentsForMnemonic(self):
         sourceCode = "MOV R0\n"

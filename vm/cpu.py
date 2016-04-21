@@ -77,7 +77,7 @@ class Cpu:
         try:
             return registerIdToName[registerId]
         except KeyError:
-            raise Exception("Unknown register " + str(id))
+            raise Exception("Unknown register " + str(registerId))
     
     def __init__(self, ram, terminal):
         self.ram = ram
@@ -101,12 +101,15 @@ class Cpu:
         self.registers["PC"] += 1
         return byte
 
+    def __debugPrint(self, string):
+        print("PC:0x{0:02X} [DEBUG] {1}".format(self.registers["PC"]-1, string))
+
     def __setRegisterValueById(self, id, value):
-        #print ("[DEBUG] Setting register {0}, with {1}".format(id,value))
+        self.__debugPrint("Setting register {0}, with {1}".format(id,value))
         self.registers[self.__registerIdToName(id)] = value
 
     def __getRegisterValueById(self, id):
-        #print ("[DEBUG] Fetching register {0}".format(id))
+        self.__debugPrint("Fetching register {0}".format(id))
         return self.registers[self.__registerIdToName(id)]
 
     def __validateAddress(self, address):
@@ -295,6 +298,8 @@ class Cpu:
             self.__setZeroFlag()
 
     def __jumpOf(self, offset):
+        self.__debugPrint("Jumping of 0x{0:02X}, to 0x{1:02X}".format(offset,
+            (self.registers["PC"] + offset)% self.WORD_SIZE ))
         self.registers["PC"] = (self.registers["PC"] + offset) % self.WORD_SIZE 
 
     def __JZ(self):
@@ -361,6 +366,7 @@ class Cpu:
 
     def __CALL(self):
         functionPointerOffset = self.__fetchNextByteFromRom()
+        self.__debugPrint("Calling function ahead: 0x{0:02X}".format(functionPointerOffset))
         self.__pushToStack(self.registers["PC"])
         self.__jumpOf(functionPointerOffset)
 
@@ -372,6 +378,7 @@ class Cpu:
 
     def __RET(self):
         functionPointer = self.__popFromStack()
+        self.__debugPrint("Returning from function to PC = : 0x{0:02X}".format(functionPointer))
         self.registers["PC"] = functionPointer
 
     def __IN(self):
@@ -396,7 +403,7 @@ class Cpu:
         self.running = True
         while self.running: 
             instruction = self.__fetchNextByteFromRom()
-            #print ("[DEBUG] Executing instruction: 0x{0:02X}".format(instruction))
+            self.__debugPrint("Executing instruction: 0x{0:02X}".format(instruction))
             try:
                 self.opcodeToHandlerMapping[instruction]() 
             except Exception as e: 
