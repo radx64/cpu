@@ -14,7 +14,7 @@ class CpuTests(unittest.TestCase):
         unittest.TestCase.__init__(self, parameters)
         self.ram = [0x00] * 256;    # so much blocks of memory :)
         self.terminal = TerminalFake()
-        self.cpu = Cpu(self.ram, self.terminal)
+        self.cpu = Cpu(self.ram, self.terminal, True)
 
     def test_IfCpuGeneralRegistersHaveCorrectValuesAtFirstBoot(self):
         self.assertEquals(self.cpu.registers["R0"], 0x00)
