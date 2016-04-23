@@ -38,7 +38,7 @@ class CpuTests(unittest.TestCase):
             "MOV R1, R2\n"
             "JZ start\n")
         binary = self.compiler.compile(sourceCode)
-        self.assertEquals(binary, [0x00, 0x01, 0x02, 0x21, 0xFF]) 
+        self.assertEquals(binary, [0x00, 0x01, 0x02, 0x21, 0xFB]) 
 
     def test_IfItCompilerImmValuesProperly(self):
         sourceCode = ("SET R1, 0x12\n")

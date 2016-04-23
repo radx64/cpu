@@ -102,14 +102,14 @@ class Cpu:
         return byte
 
     def __debugPrint(self, string):
-        print("PC:0x{0:02X} [DEBUG] {1}".format(self.registers["PC"]-1, string))
+        print("PC:0x{0:02X} [DEBUG] {1}".format(self.registers["PC"], string))
 
     def __setRegisterValueById(self, id, value):
-        self.__debugPrint("Setting register {0}, with {1}".format(id,value))
+        self.__debugPrint("Setting register 0x{0:02X}, with 0x{1:02X}".format(id,value))
         self.registers[self.__registerIdToName(id)] = value
 
     def __getRegisterValueById(self, id):
-        self.__debugPrint("Fetching register {0}".format(id))
+        self.__debugPrint("Fetching register 0x{0:02X}".format(id))
         return self.registers[self.__registerIdToName(id)]
 
     def __validateAddress(self, address):
@@ -337,12 +337,15 @@ class Cpu:
             raise Exception("Stack pointer is already at 0x00. Can't move it further back.")
         self.registers["SP"] -= 0x1
         self.ram[self.registers["SP"]] = value
+        self.__debugPrint("Pushing to stack 0x{0:02X}, SP=0x{1:02X}".format(value,
+            self.registers["SP"]))
 
     def __popFromStack(self):
         if(self.registers["SP"] == 0xFF):
             raise Exception("Stack pointer is already at 0xFF. Can't move it further.")
         A = self.ram[self.registers["SP"]]
         self.registers["SP"] += 0x1
+        self.__debugPrint("Poping from stack 0x{0:02X}, SP=0x{1:02X}".format(A, self.registers["SP"]))
         return A        
 
     def __PUSH (self):

@@ -172,7 +172,7 @@ class Compiler:
         if isinstance(desired, str):
             return desired
         if desired < current:
-            return WORD_SIZE - (desired + current - 2)
+            return (desired - current - 2) % WORD_SIZE
         else:
             return (desired - current - 1) % WORD_SIZE
 
@@ -216,6 +216,7 @@ def main():  # pragma: no cover
     binary = compiler.compile(readSource())
     writeOutput(binary)
     print("Size of binary: " + str(len(binary)) + " bytes")
+    print(compiler.labels)
 
 if __name__ == '__main__':  # pragma: no cover
     try:
