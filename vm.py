@@ -16,12 +16,15 @@ def readBinary():  # pragma: no cover
         raise Exception ("Program file " + sys.argv[1] + " not found")
 
 def main():  # pragma: no cover
-    if len(sys.argv) != 2:
+    if len(sys.argv) < 2:
         help()
         return
     ram = [0xFF] * 256;
     terminal = Terminal()
-    cpu = Cpu(ram, terminal)
+    if "-d" in sys.argv:
+        cpu = Cpu(ram, terminal, debug=True)
+    else:
+        cpu = Cpu(ram, terminal)
     program = readBinary()
     cpu.run(program)
 

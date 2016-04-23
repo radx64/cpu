@@ -215,8 +215,8 @@ def main():  # pragma: no cover
     compiler = Compiler()
     binary = compiler.compile(readSource())
     writeOutput(binary)
-    print("Size of binary: " + str(len(binary)) + " bytes")
-    print(compiler.labels)
+    print("Size of binary: " + str(len(binary)) + " bytes. " 
+        + str(WORD_SIZE - len(binary)) + " bytes free left.")
 
 if __name__ == '__main__':  # pragma: no cover
     try:

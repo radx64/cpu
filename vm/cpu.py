@@ -79,7 +79,7 @@ class Cpu:
         except KeyError:
             raise Exception("Unknown register " + str(registerId))
     
-    def __init__(self, ram, terminal):
+    def __init__(self, ram, terminal, debug=False):
         self.ram = ram
         self.rom = []
         self.running = False
@@ -87,6 +87,7 @@ class Cpu:
         self._initRegisters()
         self.opcodeToHandlerMapping = self._getOpcodeToHandlerMapping()
         self.io_devices = self.__initDevices()
+        self.debug = debug
 
     def __initDevices(self):
         devices = {
@@ -102,7 +103,8 @@ class Cpu:
         return byte
 
     def __debugPrint(self, string):
-        print("PC:0x{0:02X} [DEBUG] {1}".format(self.registers["PC"], string))
+        if self.debug:
+            print("PC:0x{0:02X} [DEBUG] {1}".format(self.registers["PC"], string))
 
     def __setRegisterValueById(self, id, value):
         self.__debugPrint("Setting register 0x{0:02X}, with 0x{1:02X}".format(id,value))
