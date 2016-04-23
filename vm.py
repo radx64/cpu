@@ -4,8 +4,9 @@ from vm.cpu import Cpu
 from vm.terminal import Terminal
 
 def help():  # pragma: no cover
-    helpText = ("Usage: vm.py program.bin\n"
-                "\t program.bin - program filename\n")
+    helpText = ("Usage: vm.py program.bin [-d]\n"
+                "\t program.bin - program filename\n"
+                "\t -d - turn on debug prints\n")
     print(helpText)
 
 def readBinary():  # pragma: no cover
