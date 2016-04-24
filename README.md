@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://github.com/radx64/vm/blob/master/logo.png?raw=true" alt="Logo image" width="50%" height="50%"/>
+  <img src="https://github.com/radx64/vm/blob/master/logo.png?raw=true" alt="Logo image" width="10%" height="10%"/>
 </p>
 # Small and simple, pure Virtual Machine.
 
