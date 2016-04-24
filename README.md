@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://github.com/radx64/vm/blob/master/logo.png?raw=true" alt="Logo image"/>
+  <img src="https://github.com/radx64/vm/blob/master/logo.png?raw=true" alt="Logo image" width="50%" height="50%"/>
 </p>
 # Small and simple, pure Virtual Machine.
 
@@ -13,18 +13,6 @@ Travis status:
 
 Coveralls status:
 [![Coverage Status](https://coveralls.io/repos/github/radx64/vm/badge.svg?branch=master)](https://coveralls.io/github/radx64/vm?branch=master)
-## Project parts
-* [ ] CPU design
- - [X] Memory handling
- - [X] Jumps
- - [X] Function calls
- - [X] In/Out ports
- - [ ] Interrupts
-
-* [X] Decompiler implementation
-* [X] Compiler implementation
-* [ ] Virtual machine implementation - ongoing
-* [ ] Example programs - ongoing
 
 ## Virtual Machine design
 ```
@@ -290,3 +278,7 @@ In root directory of project just run:
 ``
 nosetests
 ``
+
+## To be done
+[ ] Interrupts
+[ ] More example programms
