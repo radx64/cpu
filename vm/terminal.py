@@ -18,7 +18,7 @@ class Terminal:
     def _controlPortWrite(self, value): # pragma: no cover
         pass
 
-    def _getInput(): # pragma: no cover
+    def _getInput(self): # pragma: no cover
         return input("INPUT>> ")
 
     def _dataInPortRead(self):
@@ -27,7 +27,7 @@ class Terminal:
         
         nextCharacter = self.readbuffer[0]
         self.readbuffer = self.readbuffer[1:]
-        return nextCharacter
+        return ord(nextCharacter)
 
     def _dataOutPortWrite(self, value):
         if value == 10:

@@ -411,6 +411,6 @@ class Cpu:
             self.__debugPrint("Executing instruction: 0x{0:02X}".format(instruction))
             try:
                 self.opcodeToHandlerMapping[instruction]() 
-            except Exception as e: 
+            except Exception as e:
                 print (e)
                 raise Exception(e)
