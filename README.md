@@ -279,5 +279,5 @@ nosetests
 ``
 
 ## To be done
-[ ] Interrupts
-[ ] More example programms
+- [ ] Interrupts
+- [ ] More example programs
