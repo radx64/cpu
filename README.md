@@ -1,8 +1,7 @@
+# Small and simple, pure Virtual Machine.
 <p align="center">
   <img src="https://github.com/radx64/vm/blob/master/logo.png?raw=true" alt="Logo image" width="20%" height="20%"/>
 </p>
-# Small and simple, pure Virtual Machine.
-
 ## Rationale
 The purpose of this project is to implement simple virtual machine, which is capable to run 
 CPU specific machine code and compiler capable of assembling mnemonic code to machine one.
