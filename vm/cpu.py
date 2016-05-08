@@ -5,8 +5,7 @@ class Cpu:
 
     available_registers = {
     "R0", "R1", "R2", "R3", "R4", "R5", "R6", "R7",
-    "I0", "I1", "I2", "I3", "I4", "I5", "I6", "I7",
-    "IE", "FR", "SP", "PC"
+    "FR", "SP", "PC"
     }
 
     def _initRegisters(self):
@@ -61,15 +60,6 @@ class Cpu:
         0x05 : "R5",
         0x06 : "R6",
         0x07 : "R7",
-        0x10 : "I0",
-        0x11 : "I1",
-        0x12 : "I2",
-        0x13 : "I3",
-        0x14 : "I4",
-        0x15 : "I5",
-        0x16 : "I6",
-        0x17 : "I7",
-        0xFC : "IE",
         0xFD : "FR",
         0xFE : "SP",
         0xFF : "PC",

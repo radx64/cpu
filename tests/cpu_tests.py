@@ -26,19 +26,6 @@ class CpuTests(unittest.TestCase):
         self.assertEquals(self.cpu.registers["R6"], 0x00)
         self.assertEquals(self.cpu.registers["R7"], 0x00)
 
-    def test_IfCpuInterruptRegistersHaveCorrectValuesAtBoot(self):
-        self.assertEquals(self.cpu.registers["I0"], 0x00)
-        self.assertEquals(self.cpu.registers["I1"], 0x00)
-        self.assertEquals(self.cpu.registers["I2"], 0x00)
-        self.assertEquals(self.cpu.registers["I3"], 0x00)
-        self.assertEquals(self.cpu.registers["I4"], 0x00)
-        self.assertEquals(self.cpu.registers["I5"], 0x00)
-        self.assertEquals(self.cpu.registers["I6"], 0x00)
-        self.assertEquals(self.cpu.registers["I7"], 0x00)
-
-    def test_IfCpuInterruptEnableRegisterHaveCorrectValueAtBoot(self):
-        self.assertEquals(self.cpu.registers["IE"], 0x00)
-
     def test_IfCpuFlagRegisterHaveCorrectValueAtBoot(self):
         self.assertEquals(self.cpu.registers["FR"], 0x00)
 

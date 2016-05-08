@@ -29,8 +29,6 @@ Coveralls status:
 │           program counter              │ PC                        │
 │           stack pointer                │ SP                        │
 │           flag register                │ FR                        │
-│           interrupt registers          │ I0 .. I3 I4 .. I7         │
-│           maskable interrupt enable    │ IE                        │
 ╘════════════════════════════════════════╧═══════════════════════════╛
 ```
 As written above, architecture of CPU is 8 bit. As CPU address bus is connected to fragment 
@@ -38,8 +36,8 @@ of a memory it is able to directly address 256 cells of it, one byte each. Gener
 registers can be used by programmer. 
 
 Program counter points to next CPU instruction that will be executed after current one (except 
-situation when interrupt or jump is performed). CPU instructions are stored in ROM which 
-is initialized before CPU start.
+situation when jump is performed). CPU instructions are stored in ROM which is initialized before
+CPU start.
 
 Stack pointer points to top of a stack in RAM (initially 0xFF address of memory) and stack grows in 
 lower addresses direction.
@@ -60,12 +58,11 @@ Flag register holds information about current CPU state:
 ╒══════════════════╕   Memory bus    │                  │    Memory bus    ╒══════════════════╕
 │Random Access Mem.│ <-------------> │    Processing    │  <-------------> │  Program memory  │
 ╘══════════════════╛                 │                  │                  ╘══════════════════╛
-╒══════════════════╕ Interrupt line  │                  │
-│Progammable timer │ <-------------> │       Unit       │
-╘══════════════════╛                 ╘══════════════════╛
-         ^                                    │
-         |        Configuration port          │
-         ╘----------------------------------->│
+                                     │                  │
+                                     │       Unit       │
+                                     ╘══════════════════╛
+                                               │
+                                               │
                                              ╒═══╕
 ╒══════════════════╕         Data Port       │ I │
 │     Terminal     │ <---------------------->│ / │
@@ -209,26 +206,26 @@ Flag register holds information about current CPU state:
 ## Central Processing Unit Registers Identifiers
 
 ```
- General registers       Interrupt registers    CPU operating registers
-╒══════════╤══════╕      ╒══════════╤══════╕      ╒══════════╤══════╕
-│ Register │ Id   │      │ Register │ Id   │      │ Register │ Id   │
-╞══════════╪══════╡      ╞══════════╪══════╡      ╞══════════╪══════╡
-│ R0       │ 0x00 │      │ I0       │ 0x10 │      │ IE       │ 0xFC │
-├──────────┼──────┤      ├──────────┼──────┤      ├──────────┼──────┤
-│ R1       │ 0x01 │      │ I1       │ 0x11 │      │ FR       │ 0xFD │ 
-├──────────┼──────┤      ├──────────┼──────┤      ├──────────┼──────┤ 
-│ R2       │ 0x02 │      │ I2       │ 0x12 │      │ SP       │ 0xFE │ 
-├──────────┼──────┤      ├──────────┼──────┤      ├──────────┼──────┤
-│ R3       │ 0x03 │      │ I3       │ 0x13 │      │ PC       │ 0xFF │
-├──────────┼──────┤      ├──────────┼──────┤      ╘══════════╧══════╛
-│ R4       │ 0x04 │      │ I4       │ 0x14 │     
-├──────────┼──────┤      ├──────────┼──────┤     
-│ R5       │ 0x05 │      │ I5       │ 0x15 │     
-├──────────┼──────┤      ├──────────┼──────┤     
-│ R6       │ 0x06 │      │ I6       │ 0x16 │     
-├──────────┼──────┤      ├──────────┼──────┤     
-│ R7       │ 0x07 │      │ I7       │ 0x17 │     
-╘══════════╧══════╛      ╘══════════╧══════╛     
+ General registers     CPU operating registers
+╒══════════╤══════╕      ╒══════════╤══════╕
+│ Register │ Id   │      │ Register │ Id   │
+╞══════════╪══════╡      ╞══════════╪══════╡
+│ R0       │ 0x00 │      │ FR       │ 0xFD │ 
+├──────────┼──────┤      ├──────────┼──────┤
+│ R1       │ 0x01 │      │ SP       │ 0xFE │ 
+├──────────┼──────┤      ├──────────┼──────┤ 
+│ R2       │ 0x02 │      │ PC       │ 0xFF │
+├──────────┼──────┤      ╘══════════╧══════╛
+│ R3       │ 0x03 │     
+├──────────┼──────┤ 
+│ R4       │ 0x04 │     
+├──────────┼──────┤     
+│ R5       │ 0x05 │     
+├──────────┼──────┤     
+│ R6       │ 0x06 │     
+├──────────┼──────┤     
+│ R7       │ 0x07 │     
+╘══════════╧══════╛     
 
 ```
 
@@ -243,8 +240,6 @@ Flag register holds information about current CPU state:
 │ Terminal data in      │ 0x01      │ 
 ├───────────────────────┼───────────┤ 
 │ Terminal data out     │ 0x02      │
-├───────────────────────┼───────────┤
-│ PIT control           │ 0x03      │
 ╘═══════════════════════╧═══════════╛ 
 ```
 
@@ -255,7 +250,7 @@ Terminal device is connected via I/O bus on addresses 0x00 - 0x02.
 ### Flags
 Terminal control port:
 * bit 0 - DATA_READY
-* bits 1-7 are unused for now.
+* bits 1-7 are unused.
 
 ### Writing to terminal
 
@@ -268,16 +263,9 @@ be read to check if there is any character in buffer available. If flag DATA_REA
 byte of data could be read from terminal data in port(0x01). Otherwise reading operation will be blocking,
 causing processor to stop unitl new data is ready. 
 
-### Interrupts from terminal
-[[To be specified]]
-
 ## Running tests
 
 In root directory of project just run:
 ``
 nosetests
 ``
-
-## To be done
-- [ ] Interrupts
-- [ ] More example programs
