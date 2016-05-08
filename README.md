@@ -274,6 +274,7 @@ nosetests
 ``
 python compiler.py source.asm output.bin
 ``
+
 Where:
 * source.asm - assembly source file
 * output.bin - output binary name
@@ -282,6 +283,7 @@ Where:
 ``
 python decompiler.py source.bin output.asm
 ``
+
 Where:
 * source.bin - executable binary file
 * output.asm - output assembly name
@@ -290,6 +292,7 @@ Where:
 ``
 python vm.py program.bin [-d]
 ``
+
 Where:
 * program.bin - executable binary file
 * -d - optional debug mode
