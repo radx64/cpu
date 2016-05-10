@@ -24,7 +24,7 @@ Coveralls status:
 ├────────────────────────────────────────┼───────────────────────────┤
 │ Read Only Memory (Program memory)      │ 256 words                 │
 ├────────────────────────────────────────┼───────────────────────────┤
-│ Registers set:                         │ 20 registers              │
+│ Registers set:                         │ 11 registers              │
 │           general purpose registers    │ R0 .. R7                  │
 │           program counter              │ PC                        │
 │           stack pointer                │ SP                        │
